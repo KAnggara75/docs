@@ -2,7 +2,7 @@
 title: WhatsApps API Reference
 
 language_tabs: # must be one of https://github.com/rouge-ruby/rouge/wiki/List-of-supported-languages-and-lexers
-  - cUrl
+  - cURL
   - nodeJs
   - PHP
 
