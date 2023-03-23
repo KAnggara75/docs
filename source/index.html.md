@@ -13,13 +13,13 @@ toc_footers:
 includes:
   - errors
 
-search: true
+search: false
 
 code_clipboard: true
 
 meta:
   - name: description
-    content: Documentation for the Kittn API
+    content: Documentation for the WhatsApp API
 ---
 
 # Introduction
