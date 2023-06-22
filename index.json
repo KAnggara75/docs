@@ -43,14 +43,6 @@
         "tags": ["Devices"],
         "summary": "Add Devices",
         "description": "Endpoint ini untuk menambahkan device baru yang bisa digunakan untuk pairing ke API .",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/Authorization"
-          },
-          {
-            "$ref": "#/components/parameters/Content"
-          }
-        ],
         "requestBody": {
           "description": "ID dari device yang ingin ditambahkan.",
           "required": true,
@@ -87,18 +79,18 @@
                   "properties": {
                     "id": {
                       "type": "string",
-                      "pattern": "^example-[0-9a-z]+$",
-                      "maxLength": 100
+                      "maxLength": 100,
+                      "pattern": "[ [:alnum:]_\".,}{\n\r\t\\0\\w\\h:-]"
                     },
                     "status": {
                       "type": "string",
-                      "pattern": "^example-[0-9a-z]+$",
-                      "maxLength": 100
+                      "maxLength": 100,
+                      "pattern": "[ [:alnum:]_\".,}{\n\r\t\\0\\w\\h:-]"
                     },
                     "created_at": {
                       "type": "string",
-                      "pattern": "^example-[0-9a-z]+$",
-                      "maxLength": 100
+                      "maxLength": 100,
+                      "pattern": "[ [:alnum:]_\".,}{\n\r\t\\0\\w\\h:-]"
                     },
                     "meta": {
                       "type": "object",
@@ -106,8 +98,8 @@
                       "properties": {
                         "location": {
                           "type": "string",
-                          "pattern": "^example-[0-9a-z]+$",
-                          "maxLength": 100
+                          "maxLength": 100,
+                          "pattern": "[ [:alnum:]_\".,}{\n\r\t\\0\\w\\h:-]"
                         }
                       }
                     }
@@ -188,7 +180,7 @@
                     "message": {
                       "type": "string",
                       "maxLength": 100,
-                      "pattern": "/./g"
+                      "pattern": "[ [:alnum:]_\".,}{\n\r\t\\0\\w\\h:-]"
                     },
                     "data": {
                       "type": "object",
@@ -209,32 +201,7 @@
     }
   },
   "components": {
-    "parameters": {
-      "Authorization": {
-        "name": "Authorization",
-        "in": "header",
-        "description": "API Token",
-        "required": true,
-        "schema": {
-          "type": "string",
-          "maxLength": 250,
-          "pattern": "^[-_:.~$a-zA-Z0-9]+$"
-        },
-        "example": "y0xgWUOLYe_wcI^RFN9V}OXodIti4RJpn9Z6"
-      },
-      "Content": {
-        "name": "Content-Type",
-        "in": "header",
-        "description": "Tipe dari request harus application/json",
-        "required": true,
-        "schema": {
-          "type": "string",
-          "maxLength": 250,
-          "pattern": "^[-_:.~$a-zA-Z0-9]+$"
-        },
-        "example": "application/json"
-      }
-    },
+    "parameters": {},
     "examples": {
       "defaultResponse": {
         "description": "400 Bad Request",
@@ -267,7 +234,6 @@
         }
       }
     },
-
     "responses": {},
     "schemas": {
       "device_id": {
@@ -276,8 +242,8 @@
         "properties": {
           "device_id": {
             "type": "string",
-            "maxLength": 100,
-            "pattern": "^[-_:.~$a-zA-Z0-9]+$"
+            "maxLength": 500,
+            "pattern": "[ [:alnum:]_\".,}{\n\r\t\\0\\w\\h:-]"
           }
         }
       },
@@ -286,17 +252,19 @@
         "type": "object",
         "properties": {
           "message": {
-            "$ref": "#/components/schemas/device_id"
+            "type": "string",
+            "maxLength": 500,
+            "pattern": "[ [:alnum:]_\".,}{\n\r\t\\0\\w\\h:-]"
           }
         }
       }
     },
     "securitySchemes": {
       "bearerAuth": {
-        "name": "API_TOKEN",
-        "description": "Authentication with device id",
-        "type": "apiKey",
-        "in": "header"
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Authentication with device id"
       }
     }
   }
