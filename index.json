@@ -1,0 +1,465 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "version": "0.0.1-alpha",
+    "title": "WhatsAPI",
+    "description": "Unofficial WhatsApp API",
+    "contact": {
+      "name": "Kelvin Anggara",
+      "email": "kelvin.kanggara@gmail.com",
+      "url": "https://kanggara.me"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://api.restwa.my.id/LICENSE.md"
+    }
+  },
+  "servers": [
+    {
+      "description": "Unofficial WhatsApp API",
+      "url": "https://api.kirimwa.id/v1",
+      "variables": {
+        "environment": {
+          "description": "Server Environment",
+          "default": "api",
+          "enum": ["dev", "qa", "api"]
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/devices": {
+      "description": "Sebelum dapat mengirim pesan menggunakan API KirimWA.id maka anda perlu menambahkan device terlebih dahulu. Anda dapat memiliki lebih dari satu device pada API KirimWA.id. Sebuah device harusnya terasosiasi dengan sebuah nomor WhatsApp.",
+      "post": {
+        "tags": ["Devices"],
+        "summary": "Add Devices",
+        "description": "Endpoint ini untuk menambahkan device baru yang bisa digunakan untuk pairing ke API KirimWA.id.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "API Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer y0xgWUOLYe_wcI^RFN9V}OXodIti4RJpn{@-example"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Tipe dari request harus application/json",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          }
+        ],
+        "requestBody": {
+          "description": "ID dari device yang ingin ditambahkan.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "device_id": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {
+                "iphone-x": {
+                  "description": "Device ID dari iPhone X",
+                  "value": {
+                    "device_id": "iphone-x"
+                  }
+                },
+                "iphone-xr": {
+                  "description": "Device ID dari iPhone XR",
+                  "value": {
+                    "device_id": "iphone-xr"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "type": "string"
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "location": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "success": {
+                    "description": "Success Add device",
+                    "value": {
+                      "id": "iphone-x",
+                      "status": "disconnected",
+                      "created_at": "2023-06-22T06:26:42.531Z",
+                      "meta": {
+                        "location": "https://api.kirimwa.id/v1/devices/iphone-x"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "Bad Request": {
+                    "description": "Device id already exists, choose another one",
+                    "value": {
+                      "message": "Error: Device id already exists, choose another one."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Devices"],
+        "summary": "Add Devices",
+        "description": "Endpoint ini untuk menambahkan device baru yang bisa digunakan untuk pairing ke API KirimWA.id.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "API Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer y0xgWUOLYe_wcI^RFN9V}OXodIti4RJpn{@-example"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Tipe dari request harus application/json",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "type": "string"
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "location": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "success": {
+                    "description": "Success Add device",
+                    "value": {
+                      "id": "iphone-x",
+                      "status": "disconnected",
+                      "created_at": "2023-06-22T06:26:42.531Z",
+                      "meta": {
+                        "location": "https://api.kirimwa.id/v1/devices/iphone-x"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "Bad Request": {
+                    "description": "Device id already exists, choose another one",
+                    "value": {
+                      "message": "Error: Device id already exists, choose another one."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/devices/{device_id}": {
+      "description": "Sebelum dapat mengirim pesan menggunakan API KirimWA.id maka anda perlu menambahkan device terlebih dahulu. Anda dapat memiliki lebih dari satu device pada API KirimWA.id. Sebuah device harusnya terasosiasi dengan sebuah nomor WhatsApp.",
+      "get": {
+        "tags": ["Devices"],
+        "summary": "Add Devices",
+        "description": "Endpoint ini untuk menambahkan device baru yang bisa digunakan untuk pairing ke API KirimWA.id.",
+        "parameters": [
+          {
+            "name": "device_id",
+            "in": "path",
+            "description": "ID of pet to fetch",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "iphone-x"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "API Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer y0xgWUOLYe_wcI^RFN9V}OXodIti4RJpn{@-example"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Tipe dari request harus application/json",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          }
+        ],
+
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "type": "string"
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "location": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "success": {
+                    "description": "Success Add device",
+                    "value": {
+                      "id": "iphone-x",
+                      "status": "disconnected",
+                      "created_at": "2023-06-22T06:26:42.531Z",
+                      "meta": {
+                        "location": "https://api.kirimwa.id/v1/devices/iphone-x"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "Bad Request": {
+                    "description": "Device id already exists, choose another one",
+                    "value": {
+                      "message": "Error: Device id already exists, choose another one."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Devices"],
+        "summary": "Add Devices",
+        "description": "Endpoint ini untuk menambahkan device baru yang bisa digunakan untuk pairing ke API KirimWA.id.",
+        "parameters": [
+          {
+            "name": "device_id",
+            "in": "path",
+            "description": "ID of pet to fetch",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "iphone-x"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "API Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer y0xgWUOLYe_wcI^RFN9V}OXodIti4RJpn{@-example"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Tipe dari request harus application/json",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "type": "string"
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "location": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "success": {
+                    "description": "Success Add device",
+                    "value": {
+                      "id": "iphone-x",
+                      "status": "disconnected",
+                      "created_at": "2023-06-22T06:26:42.531Z",
+                      "meta": {
+                        "location": "https://api.kirimwa.id/v1/devices/iphone-x"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "Bad Request": {
+                    "description": "Device id already exists, choose another one",
+                    "value": {
+                      "message": "Error: Device id already exists, choose another one."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
