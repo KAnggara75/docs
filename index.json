@@ -216,7 +216,61 @@
 						"$ref": "#/components/responses/NotFound"
 					},
 					"default": {
-						"$ref": "#/components/responses/204"
+						"$ref": "#/components/responses/DefaultResponse"
+					}
+				}
+			}
+		},
+		"/qr": {
+			"get": {
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"tags": ["QR Code"],
+				"summary": "Devices Status",
+				"description": "Endpoint ini untuk melihat semua devices yang sudah dibuat oleh akun anda. Maksimum data yang dikembalikan per page adalah 10 item. Item terkahir yang dikembalikan per halaman ada pada properti last_key. Properti ini kemudian dapat digunakan untuk merequest halaman berikutnya dengan menggunakan query string parameter start_key. Jika nilai dari last_key adalah null maka data sudah habis dan ini adalah halaman terakhir.",
+				"parameters": [
+					{
+						"name": "device_id",
+						"in": "query",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/String"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "200 OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/2XX"
+								},
+								"examples": {
+									"QRCode": {
+										"$ref": "#/components/examples/QRCode"
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"$ref": "#/components/responses/BadRequest"
+					},
+					"401": {
+						"$ref": "#/components/responses/Unauthorized"
+					},
+					"403": {
+						"$ref": "#/components/responses/Forbidden"
+					},
+					"404": {
+						"$ref": "#/components/responses/NotFound"
+					},
+					"default": {
+						"$ref": "#/components/responses/DefaultResponse"
 					}
 				}
 			}
@@ -433,6 +487,16 @@
 								"maxLength": 500,
 								"pattern": "[\\n\\s\\w\\W^$]"
 							},
+							"qr_code": {
+								"type": "string",
+								"maxLength": 500,
+								"pattern": "[\\n\\s\\w\\W^$]"
+							},
+							"image_url": {
+								"type": "string",
+								"maxLength": 500,
+								"pattern": "[\\n\\s\\w\\W^$]"
+							},
 							"devices": {
 								"type": "array",
 								"minItems": 1,
@@ -602,6 +666,17 @@
 						"connected_at": "2021-07-18T13:26:57.698Z",
 						"disconnected_at": "2021-07-18T13:27:33.089Z",
 						"disconnected_reason": "Send message timeout."
+					}
+				}
+			},
+			"QRCode": {
+				"description": "Get Devices Status",
+				"summary": "QR Code Get",
+				"value": {
+					"message": "Success.",
+					"data": {
+						"qr_code": "1@U2tS5Q1elzj6Y7IAKDurwvja47SQz8bvW24fb43r3n+gPC4PN1iSNlGLizlfGsrHSD/M6ym6/aYiYw==,xXlcsqVquva7/1c2g8wAZkWdnk2el5tHWh7MWUW2UTc=,v+P3exsbB1W62wX3Vn4dcC==",
+						"image_url": "https://api.kirimwa.id/v1/qr/show?qrcode=1%40U2tS5Q1elzj6Y7IAKDurwvja47SQz8bvW24fb43r3n%2BgPC4PN1iSNlGLizlfGsrHSD%2FM6ym6%2FaYiYw%3D%3D%2CxXlcsqVquva7%2F1c2g8wAZkWdnk2el5tHWh7MWUW2UTc%3D%2Cv%2BP3exsbB1W62wX3Vn4dcC%3D%3D&device_id=YOUR_DEVICE_ID"
 					}
 				}
 			},
