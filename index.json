@@ -397,7 +397,7 @@
 								},
 								"examples": {
 									"GroupList": {
-										"$ref": "#/components/examples/GroupList"
+										"$ref": "#/components/examples/SendMessage"
 									}
 								}
 							}
@@ -608,6 +608,169 @@
 					}
 				}
 			}
+		},
+		"/batch-messages": {
+			"post": {
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"tags": ["Messages"],
+				"summary": "Send Batch Devices",
+				"description": "Endpoint ini untuk menambahkan device baru yang bisa digunakan untuk pairing ke API KirimWA.id.",
+				"requestBody": {
+					"$ref": "#/components/requestBodies/SendBatchMessage"
+				},
+				"responses": {
+					"200": {
+						"description": "200 OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/2XX"
+								},
+								"examples": {
+									"Created": {
+										"$ref": "#/components/examples/SendBatchMessage"
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"$ref": "#/components/responses/BadRequest"
+					},
+					"401": {
+						"$ref": "#/components/responses/Unauthorized"
+					},
+					"403": {
+						"$ref": "#/components/responses/Forbidden"
+					},
+					"404": {
+						"$ref": "#/components/responses/NotFound"
+					},
+					"default": {
+						"$ref": "#/components/responses/DefaultResponse"
+					}
+				}
+			},
+			"get": {
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"tags": ["Messages"],
+				"summary": "Get Incoming Messages",
+				"description": "Endpoint ini digunakan untuk melihat semua pesan batch yang telah dikirim. Dimana pada setiap pesan batch tersebut terdapat pesan yang sudah diproses processed dan pesan yang gagal dikirim failed.",
+				"parameters": [
+					{
+						"name": "device_id",
+						"in": "query",
+						"description": "Pesan batch yang dikirim berdasarkan device id.",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/String"
+						}
+					},
+					{
+						"name": "start_key",
+						"in": "query",
+						"description": "Nilai dari meta.last_key yang digunakan untuk merequest halaman berikutnya.",
+						"schema": {
+							"$ref": "#/components/schemas/String"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "200 OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/2XX"
+								},
+								"examples": {
+									"GetBathcMessages": {
+										"$ref": "#/components/examples/GetBatchMessages"
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"$ref": "#/components/responses/BadRequest"
+					},
+					"401": {
+						"$ref": "#/components/responses/Unauthorized"
+					},
+					"403": {
+						"$ref": "#/components/responses/Forbidden"
+					},
+					"404": {
+						"$ref": "#/components/responses/NotFound"
+					},
+					"default": {
+						"$ref": "#/components/responses/DefaultResponse"
+					}
+				}
+			}
+		},
+		"/batch-messages/{batch_id}": {
+			"get": {
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"tags": ["Messages"],
+				"summary": "Get Batch Messages Status",
+				"description": "Endpoint ini digunakan untuk melihat pesan batch berdasarkan BATCH_ID. Informasi detil dari tiap-tiap pesan dapat dilihat berdasarkan message id menggunakan endpoint GET /messages/ID.",
+				"parameters": [
+					{
+						"name": "batch_id",
+						"in": "path",
+						"description": "Pesan batch yang dikirim berdasarkan device id.",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/String"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "200 OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/2XX"
+								},
+								"examples": {
+									"GetBatchMessagesStatus": {
+										"$ref": "#/components/examples/GetBatchMessagesStatus"
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"$ref": "#/components/responses/BadRequest"
+					},
+					"401": {
+						"$ref": "#/components/responses/Unauthorized"
+					},
+					"403": {
+						"$ref": "#/components/responses/Forbidden"
+					},
+					"404": {
+						"$ref": "#/components/responses/NotFound"
+					},
+					"default": {
+						"$ref": "#/components/responses/DefaultResponse"
+					}
+				}
+			}
 		}
 	},
 	"components": {
@@ -687,6 +850,89 @@
 								"message": "Halo ini adalah pesan dari api.kirimwa.id",
 								"device_id": "iphone-x-pro",
 								"message_type": "text"
+							}
+						}
+					}
+				}
+			},
+			"SendBatchMessage": {
+				"description": "ID dari device yang ingin ditambahkan.",
+				"required": true,
+				"content": {
+					"application/json": {
+						"schema": {
+							"type": "object",
+							"additionalProperties": false,
+							"properties": {
+								"messages": {
+									"description": "Array of message dari pesan yang akan dikirimkan. Nilai dari setiap tiap atribut message sama dengan parameter pada POST /messages minus atribut device_id",
+									"type": "array",
+									"maxItems": 50,
+									"items": {
+										"type": "object",
+										"additionalProperties": false,
+										"properties": {
+											"device_id": {
+												"type": "string",
+												"maxLength": 500,
+												"pattern": "[\\n\\s\\w\\W^$]"
+											},
+											"message": {
+												"type": "string",
+												"maxLength": 500,
+												"pattern": "[\\n\\s\\w\\W^$]"
+											},
+											"caption": {
+												"type": "string",
+												"maxLength": 500,
+												"pattern": "[\\n\\s\\w\\W^$]"
+											},
+											"phone_number": {
+												"type": "string",
+												"maxLength": 500,
+												"pattern": "[\\n\\s\\w\\W^$]"
+											},
+											"is_group_message": {
+												"type": "boolean",
+												"default": false
+											},
+											"message_type": {
+												"type": "string",
+												"maxLength": 500,
+												"pattern": "[\\n\\s\\w\\W^$]"
+											},
+											"send_at": {
+												"type": "string",
+												"maxLength": 500,
+												"pattern": "[\\n\\s\\w\\W^$]"
+											}
+										}
+									}
+								},
+								"device_id": {
+									"description": "Device yang akan digunakan untuk mengirim.",
+									"type": "string",
+									"maxLength": 500,
+									"pattern": "[\\n\\s\\w\\W^$]"
+								}
+							},
+							"example": {
+								"messages": [
+									{
+										"message": "Hello from api.kirimwa.id - #1",
+										"phone_number": "6281234567890",
+										"message_type": "text"
+									},
+									{
+										"message": "https://rioastamal.net/portfolio/img/rioastamal.jpg",
+										"caption": "Hello from api.kirimwa.id - #2",
+										"phone_number": "6281234567890-1628639662",
+										"is_group_message": true,
+										"message_type": "image",
+										"send_at": "2021-10-17T06:50:05+07:00"
+									}
+								],
+								"device_id": "iphone-x-pro"
 							}
 						}
 					}
@@ -1428,6 +1674,60 @@
 							],
 							"created_at": "2019-09-22T12:31:30.000Z",
 							"number_of_participants": 6
+						}
+					}
+				}
+			},
+			"SendMessage": {
+				"description": "Send Message",
+				"summary": "Send Message",
+				"value": {
+					"message": "Send Message",
+					"data": {
+						"id": "kwid-426564a5db7940288dc9fddb845",
+						"status": "pending",
+						"message": "Message is pending and waiting to be processed.",
+						"meta": {
+							"location": "https://api.kirimwa.id/v1/messages/kwid-426564a5db7940288dc9fddb845"
+						}
+					}
+				}
+			},
+			"GetBatchMessages": {
+				"description": "Send Message",
+				"summary": "Send Message",
+				"value": {
+					"message": "Send Message",
+					"data": {
+						"meta": {
+							"last_key": "null"
+						}
+					}
+				}
+			},
+			"GetBatchMessagesStatus": {
+				"description": "Get Batch Messages Status",
+				"summary": "Get Batch Messages Status",
+				"value": {
+					"message": "Get Batch Messages Status",
+					"data": {
+						"meta": {
+							"last_key": "null"
+						}
+					}
+				}
+			},
+			"SendBatchMessage": {
+				"description": "Send Message",
+				"summary": "Send Message",
+				"value": {
+					"message": "Send Message",
+					"data": {
+						"id": "720ef393-0ba1-4dd1-9543-b9b03c35c247",
+						"message": "Messages are being processed.",
+						"meta": {
+							"number_of_messages": 2,
+							"location": "https://api.kirimwa.id/v1/batch-messages/720ef393-0ba1-4dd1-9543-b9b03c35c247"
 						}
 					}
 				}
