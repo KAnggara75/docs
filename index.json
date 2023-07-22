@@ -545,6 +545,69 @@
 					}
 				}
 			}
+		},
+		"/incoming-messages": {
+			"get": {
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"tags": ["Messages"],
+				"summary": "Get Incoming Messages",
+				"description": "Endpoint untuk melihat pesan yang masuk ke WhatsApp sesuai dengan device ID.",
+				"parameters": [
+					{
+						"name": "device_id",
+						"in": "query",
+						"description": "Device ID untuk pesan yang masuk.",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/String"
+						}
+					},
+					{
+						"name": "start_key",
+						"in": "query",
+						"description": "Nilai dari last_key yang digunakan untuk merequest halaman berikutnya.",
+						"schema": {
+							"$ref": "#/components/schemas/String"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "200 OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/2XX"
+								},
+								"examples": {
+									"IncomingMessage": {
+										"$ref": "#/components/examples/IncomingMessage"
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"$ref": "#/components/responses/BadRequest"
+					},
+					"401": {
+						"$ref": "#/components/responses/Unauthorized"
+					},
+					"403": {
+						"$ref": "#/components/responses/Forbidden"
+					},
+					"404": {
+						"$ref": "#/components/responses/NotFound"
+					},
+					"default": {
+						"$ref": "#/components/responses/DefaultResponse"
+					}
+				}
+			}
 		}
 	},
 	"components": {
@@ -930,6 +993,45 @@
 											"maxLength": 500,
 											"pattern": "[\\n\\s\\w\\W^$]"
 										},
+										"device_id": {
+											"type": "string",
+											"maxLength": 500,
+											"pattern": "[\\n\\s\\w\\W^$]"
+										},
+										"message_type": {
+											"type": "string",
+											"maxLength": 500,
+											"pattern": "[\\n\\s\\w\\W^$]"
+										},
+										"timestamp": {
+											"type": "integer"
+										},
+										"text": {
+											"type": "string",
+											"maxLength": 500,
+											"pattern": "[\\n\\s\\w\\W^$]"
+										},
+										"group_id": {
+											"type": "string",
+											"maxLength": 500,
+											"pattern": "[\\n\\s\\w\\W^$]"
+										},
+										"is_group_message": {
+											"type": "boolean"
+										},
+										"sender": {
+											"type": "string",
+											"maxLength": 500,
+											"pattern": "[\\n\\s\\w\\W^$]"
+										},
+										"caption": {
+											"type": "string",
+											"maxLength": 500,
+											"pattern": "[\\n\\s\\w\\W^$]"
+										},
+										"from_me": {
+											"type": "boolean"
+										},
 										"payload": {
 											"type": "object",
 											"additionalProperties": false,
@@ -964,6 +1066,112 @@
 												"is_group_message": {
 													"type": "boolean",
 													"default": false
+												}
+											}
+										},
+										"location": {
+											"type": "object",
+											"additionalProperties": false,
+											"properties": {
+												"name": {
+													"type": "string",
+													"maxLength": 500,
+													"nullable": true,
+													"pattern": "[\\n\\s\\w\\W^$]"
+												},
+												"address": {
+													"type": "string",
+													"maxLength": 500,
+													"nullable": true,
+													"pattern": "[\\n\\s\\w\\W^$]"
+												},
+												"longitude": {
+													"type": "integer",
+													"default": 0
+												},
+												"latitude": {
+													"type": "integer",
+													"default": 0
+												}
+											}
+										},
+										"contact": {
+											"type": "object",
+											"additionalProperties": false,
+											"properties": {
+												"name": {
+													"type": "string",
+													"maxLength": 500,
+													"nullable": true,
+													"pattern": "[\\n\\s\\w\\W^$]"
+												},
+												"vcard": {
+													"type": "string",
+													"maxLength": 500,
+													"nullable": true,
+													"pattern": "[\\n\\s\\w\\W^$]"
+												}
+											}
+										},
+										"interactive_response": {
+											"type": "object",
+											"additionalProperties": false,
+											"properties": {
+												"id": {
+													"type": "string",
+													"maxLength": 500,
+													"nullable": true,
+													"pattern": "[\\n\\s\\w\\W^$]"
+												},
+												"label": {
+													"type": "string",
+													"maxLength": 500,
+													"nullable": true,
+													"pattern": "[\\n\\s\\w\\W^$]"
+												}
+											}
+										},
+										"meta": {
+											"type": "object",
+											"additionalProperties": false,
+											"properties": {
+												"seconds": {
+													"type": "integer",
+													"minimum": 0,
+													"default": 0
+												},
+												"size": {
+													"type": "integer",
+													"minimum": 0,
+													"default": 0
+												},
+												"mime_type": {
+													"type": "string",
+													"maxLength": 500,
+													"nullable": true,
+													"pattern": "[\\n\\s\\w\\W^$]"
+												},
+												"file_name": {
+													"type": "string",
+													"maxLength": 500,
+													"nullable": true,
+													"pattern": "[\\n\\s\\w\\W^$]"
+												},
+												"dimension": {
+													"type": "object",
+													"additionalProperties": false,
+													"properties": {
+														"width": {
+															"type": "integer",
+															"minimum": 0,
+															"default": 0
+														},
+														"height": {
+															"type": "integer",
+															"minimum": 0,
+															"default": 0
+														}
+													}
 												}
 											}
 										}
@@ -1269,6 +1477,94 @@
 							"message_type": "text",
 							"caption": "null",
 							"is_group_message": false
+						}
+					}
+				}
+			},
+			"IncomingMessage": {
+				"description": "Get All Message Detail",
+				"summary": "Get All Message Detail",
+				"value": {
+					"message": "Get All Message Detail",
+					"data": {
+						"messages": [
+							{
+								"id": "3EB07079D3331BA4746C",
+								"device_id": "iphone-x-pro",
+								"message_type": "text",
+								"timestamp": 1631369848,
+								"text": "Hello incoming message from api.kirimwa.id",
+								"group_id": "6281234567890-1628639662",
+								"is_group_message": true,
+								"sender": "6281234567891",
+								"caption": "null",
+								"from_me": false,
+								"created_at": "2021-09-11T14:17:29.291Z",
+								"location": {
+									"name": "null",
+									"address": "null",
+									"latitude": 0,
+									"longitude": 0
+								},
+								"contact": {
+									"name": "null",
+									"vcard": "null"
+								},
+								"meta": {
+									"seconds": 0,
+									"size": 42,
+									"mime_type": "plain/text",
+									"dimension": {
+										"width": 0,
+										"height": 0
+									},
+									"file_name": "null"
+								},
+								"interactive_response": {
+									"id": "null",
+									"label": "null"
+								}
+							},
+							{
+								"id": "3EB07079D3331BA471ER",
+								"device_id": "iphone-x-pro",
+								"message_type": "text",
+								"timestamp": 1631369848,
+								"text": "Hello from api.kirimwa.id",
+								"group_id": "null",
+								"is_group_message": false,
+								"sender": "6281234567890",
+								"caption": "null",
+								"from_me": false,
+								"created_at": "2021-09-11T14:17:29.291Z",
+								"location": {
+									"name": "null",
+									"address": "null",
+									"latitude": 0,
+									"longitude": 0
+								},
+								"contact": {
+									"name": "null",
+									"vcard": "null"
+								},
+								"meta": {
+									"seconds": 0,
+									"size": 25,
+									"mime_type": "plain/text",
+									"dimension": {
+										"width": 0,
+										"height": 0
+									},
+									"file_name": "null"
+								},
+								"interactive_response": {
+									"id": "null",
+									"label": "null"
+								}
+							}
+						],
+						"meta": {
+							"last_key": "null"
 						}
 					}
 				}
