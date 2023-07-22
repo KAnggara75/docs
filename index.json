@@ -136,7 +136,7 @@
 				],
 				"tags": ["Devices"],
 				"summary": "Devices Status",
-				"description": "Endpoint ini untuk melihat semua devices yang sudah dibuat oleh akun anda. Maksimum data yang dikembalikan per page adalah 10 item. Item terkahir yang dikembalikan per halaman ada pada properti last_key. Properti ini kemudian dapat digunakan untuk merequest halaman berikutnya dengan menggunakan query string parameter start_key. Jika nilai dari last_key adalah null maka data sudah habis dan ini adalah halaman terakhir.",
+				"description": "Endpoint ini digunakan untuk mendapatkan informasi pada sebuah device berdasarkan DEVICE_ID.",
 				"parameters": [
 					{
 						"name": "device_id",
@@ -187,8 +187,8 @@
 					}
 				],
 				"tags": ["Devices"],
-				"summary": "Devices Status",
-				"description": "Endpoint ini untuk melihat semua devices yang sudah dibuat oleh akun anda. Maksimum data yang dikembalikan per page adalah 10 item. Item terkahir yang dikembalikan per halaman ada pada properti last_key. Properti ini kemudian dapat digunakan untuk merequest halaman berikutnya dengan menggunakan query string parameter start_key. Jika nilai dari last_key adalah null maka data sudah habis dan ini adalah halaman terakhir.",
+				"summary": "Delete Devices",
+				"description": "Endpoint ini digunakan untuk menghapus sebuah device berdasarkan DEVICE_ID. Setelah device dihapus maka request berikutnya seperti mengirim pesan yang menggunakan DEVICE_ID akan gagal.",
 				"parameters": [
 					{
 						"name": "device_id",
@@ -230,7 +230,7 @@
 				],
 				"tags": ["QR Code"],
 				"summary": "Devices Status",
-				"description": "Endpoint ini untuk melihat semua devices yang sudah dibuat oleh akun anda. Maksimum data yang dikembalikan per page adalah 10 item. Item terkahir yang dikembalikan per halaman ada pada properti last_key. Properti ini kemudian dapat digunakan untuk merequest halaman berikutnya dengan menggunakan query string parameter start_key. Jika nilai dari last_key adalah null maka data sudah habis dan ini adalah halaman terakhir.",
+				"description": "Endpoint ini digunakan untuk mendapatkan QR code yang digunakan untuk melakukan pairing device ke API KirimWA.id. Terdapat dua atribut yang dikembalikan yaitu qr_code dan image_url. Untuk menampilkan gambar QR Code kunjungi link URL yang ada terdapat pada image_url kemudian scan QR code tersebut dengan WhatsApp.",
 				"parameters": [
 					{
 						"name": "device_id",
@@ -670,8 +670,8 @@
 				}
 			},
 			"QRCode": {
-				"description": "Get Devices Status",
-				"summary": "QR Code Get",
+				"description": "Get QR Code",
+				"summary": "Get QR Code",
 				"value": {
 					"message": "Success.",
 					"data": {
