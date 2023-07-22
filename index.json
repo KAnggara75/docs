@@ -2,38 +2,43 @@
 	"openapi": "3.0.2",
 	"info": {
 		"version": "0.0.1-alpha",
-		"title": "WhatsAPI",
-		"description": "Unofficial WhatsApp API",
+		"title": "PakaiWA",
+		"description": "Unofficial WhatsApp API by KAnggara",
 		"contact": {
 			"name": "Kelvin Anggara",
-			"email": "kelvin.kanggara@gmail.com",
+			"email": "kanggara@pakaiwa.id",
 			"url": "https://kanggara.me"
 		},
 		"license": {
 			"name": "MIT",
-			"url": "https://docs.restwa.my.id/LICENSE.md"
+			"url": "https://docs.pakaiwa.id/LICENSE.md"
 		}
 	},
 	"servers": [
 		{
-			"description": "Unofficial WhatsApp API",
-			"url": "https://{environment}.restwa.my.id/v1",
+			"description": "UnOfficial WhatsApp API",
+			"url": "https://{environment}.pakaiwa.id/{version}",
 			"variables": {
 				"environment": {
 					"description": "Server Environment",
 					"default": "api",
 					"enum": ["dev", "test", "api"]
+				},
+				"version": {
+					"description": "API Version",
+					"default": "v1",
+					"enum": ["v1", "v2"]
 				}
 			}
 		}
 	],
 	"externalDocs": {
 		"description": "Find out more about WhatsAPI",
-		"url": "https://docs.restwa.my.id"
+		"url": "https://docs.pakaiwa.id"
 	},
 	"paths": {
 		"/devices": {
-			"description": "Sebelum dapat mengirim pesan menggunakan APImaka anda perlu menambahkan device terlebih dahulu. Anda dapat memiliki lebih dari satu device pada API . Sebuah device harusnya terasosiasi dengan sebuah nomor WhatsApp.",
+			"description": "Sebelum dapat mengirim pesan menggunakan API PakaiWA.id maka anda perlu menambahkan device terlebih dahulu. Anda dapat memiliki lebih dari satu device pada API PakaiWA.id. Sebuah device harusnya terasosiasi dengan sebuah nomor WhatsApp.",
 			"post": {
 				"security": [
 					{
@@ -42,174 +47,40 @@
 				],
 				"tags": ["Devices"],
 				"summary": "Add Devices",
-				"description": "Endpoint ini untuk menambahkan device baru yang bisa digunakan untuk pairing ke API .",
+				"description": "Endpoint ini untuk menambahkan device baru yang bisa digunakan untuk pairing ke API KirimWA.id.",
 				"requestBody": {
-					"description": "ID dari device yang ingin ditambahkan.",
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/device_id"
-							},
-							"examples": {
-								"iphone-x": {
-									"description": "Device ID dari iPhone X",
-									"value": {
-										"device_id": "iphone-x"
-									}
-								},
-								"iphone-xr": {
-									"description": "Device ID dari iPhone XR",
-									"value": {
-										"device_id": "iphone-xr"
-									}
-								}
-							}
-						}
-					}
+					"$ref": "#/components/requestBodies/DeviceID"
 				},
 				"responses": {
 					"201": {
-						"description": "Created",
+						"description": "201 Created",
 						"content": {
 							"application/json": {
 								"schema": {
-									"type": "object",
-									"additionalProperties": false,
-									"properties": {
-										"id": {
-											"type": "string",
-											"maxLength": 100,
-											"pattern": "[\\n\\s\\w\\W^$]"
-										},
-										"status": {
-											"type": "string",
-											"maxLength": 100,
-											"pattern": "[\\n\\s\\w\\W^$]"
-										},
-										"created_at": {
-											"type": "string",
-											"maxLength": 100,
-											"pattern": "[\\n\\s\\w\\W^$]"
-										},
-										"meta": {
-											"type": "object",
-											"additionalProperties": false,
-											"properties": {
-												"location": {
-													"type": "string",
-													"maxLength": 100,
-													"pattern": "[\\n\\s\\w\\W^$]"
-												}
-											}
-										}
-									}
+									"$ref": "#/components/schemas/2XX"
 								},
 								"examples": {
-									"success": {
-										"description": "Success Add device",
-										"value": {
-											"id": "iphone-x",
-											"status": "disconnected",
-											"created_at": "2023-06-22T06:26:42.531Z",
-											"meta": {
-												"location": "https://api./v1/devices/iphone-x"
-											}
-										}
+									"Created": {
+										"$ref": "#/components/examples/Created"
 									}
 								}
 							}
 						}
 					},
 					"400": {
-						"description": "Bad Request",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/error"
-								},
-								"examples": {
-									"BadRequest": {
-										"$ref": "#/components/examples/BadRequest"
-									}
-								}
-							}
-						}
+						"$ref": "#/components/responses/BadRequest"
 					},
 					"401": {
-						"description": "Unauthorized",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/error"
-								},
-								"examples": {
-									"Unauthorized": {
-										"$ref": "#/components/examples/Unauthorized"
-									}
-								}
-							}
-						}
+						"$ref": "#/components/responses/Unauthorized"
 					},
 					"403": {
-						"description": "Bad Request",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/error"
-								},
-								"examples": {
-									"Forbidden": {
-										"$ref": "#/components/examples/Forbidden"
-									}
-								}
-							}
-						}
+						"$ref": "#/components/responses/Forbidden"
 					},
 					"404": {
-						"description": "Not Found",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/error"
-								},
-								"examples": {
-									"Forbidden": {
-										"$ref": "#/components/examples/NotFound"
-									}
-								}
-							}
-						}
+						"$ref": "#/components/responses/NotFound"
 					},
 					"default": {
-						"description": "Success",
-						"content": {
-							"application/json": {
-								"schema": {
-									"additionalProperties": false,
-									"type": "object",
-									"properties": {
-										"success": {
-											"type": "boolean"
-										},
-										"message": {
-											"type": "string",
-											"maxLength": 100,
-											"pattern": "[\\n\\s\\w\\W^$]"
-										},
-										"data": {
-											"type": "object",
-											"additionalProperties": false
-										}
-									}
-								},
-								"examples": {
-									"defaultResponse": {
-										"$ref": "#/components/examples/defaultResponse"
-									}
-								}
-							}
-						}
+						"$ref": "#/components/responses/DefaultResponse"
 					}
 				}
 			},
@@ -220,164 +91,43 @@
 					}
 				],
 				"tags": ["Devices"],
-				"summary": "Get All Devices list",
+				"summary": "Devices List",
 				"description": "Endpoint ini untuk melihat semua devices yang sudah dibuat oleh akun anda. Maksimum data yang dikembalikan per page adalah 10 item. Item terkahir yang dikembalikan per halaman ada pada properti last_key. Properti ini kemudian dapat digunakan untuk merequest halaman berikutnya dengan menggunakan query string parameter start_key. Jika nilai dari last_key adalah null maka data sudah habis dan ini adalah halaman terakhir.",
-				"requestBody": {
-					"description": "ID dari device yang ingin ditambahkan.",
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/device_id"
-							},
-							"examples": {
-								"iphone-x": {
-									"description": "Device ID dari iPhone X",
-									"value": {
-										"device_id": "iphone-x"
-									}
-								},
-								"iphone-xr": {
-									"description": "Device ID dari iPhone XR",
-									"value": {
-										"device_id": "iphone-xr"
-									}
-								}
-							}
-						}
-					}
-				},
 				"responses": {
 					"200": {
-						"description": "Ok",
+						"description": "200 OK",
 						"content": {
 							"application/json": {
 								"schema": {
-									"type": "object",
-									"additionalProperties": false,
-									"properties": {
-										"meta": {
-											"type": "object",
-											"additionalProperties": false,
-											"properties": {
-												"last_key": {
-													"type": "string",
-													"maxLength": 500,
-													"nullable": true,
-													"pattern": "[\\n\\s\\w\\W^$]"
-												}
-											}
-										}
-									}
+									"$ref": "#/components/schemas/2XX"
 								},
 								"examples": {
-									"success": {
-										"description": "Success Add device",
-										"value": {
-											"meta": {
-												"last_key": "iphone-x"
-											}
-										}
+									"DeviceList": {
+										"$ref": "#/components/examples/DeviceList"
 									}
 								}
 							}
 						}
 					},
 					"400": {
-						"description": "Bad Request",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/error"
-								},
-								"examples": {
-									"BadRequest": {
-										"$ref": "#/components/examples/BadRequest"
-									}
-								}
-							}
-						}
+						"$ref": "#/components/responses/BadRequest"
 					},
 					"401": {
-						"description": "Unauthorized",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/error"
-								},
-								"examples": {
-									"Unauthorized": {
-										"$ref": "#/components/examples/Unauthorized"
-									}
-								}
-							}
-						}
+						"$ref": "#/components/responses/Unauthorized"
 					},
 					"403": {
-						"description": "Bad Request",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/error"
-								},
-								"examples": {
-									"Forbidden": {
-										"$ref": "#/components/examples/Forbidden"
-									}
-								}
-							}
-						}
+						"$ref": "#/components/responses/Forbidden"
 					},
 					"404": {
-						"description": "Not Found",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/error"
-								},
-								"examples": {
-									"Forbidden": {
-										"$ref": "#/components/examples/NotFound"
-									}
-								}
-							}
-						}
+						"$ref": "#/components/responses/NotFound"
 					},
 					"default": {
-						"description": "Success",
-						"content": {
-							"application/json": {
-								"schema": {
-									"additionalProperties": false,
-									"type": "object",
-									"properties": {
-										"success": {
-											"type": "boolean"
-										},
-										"message": {
-											"type": "string",
-											"maxLength": 100,
-											"pattern": "[\\n\\s\\w\\W^$]"
-										},
-										"data": {
-											"type": "object",
-											"additionalProperties": false
-										}
-									}
-								},
-								"examples": {
-									"defaultResponse": {
-										"$ref": "#/components/examples/defaultResponse"
-									}
-								}
-							}
-						}
+						"$ref": "#/components/responses/DefaultResponse"
 					}
 				}
 			}
 		},
 		"/devices/{device_id}": {
-			"description": "Sebelum dapat mengirim pesan menggunakan APImaka anda perlu menambahkan device terlebih dahulu. Anda dapat memiliki lebih dari satu device pada API . Sebuah device harusnya terasosiasi dengan sebuah nomor WhatsApp.",
 			"get": {
 				"security": [
 					{
@@ -385,184 +135,48 @@
 					}
 				],
 				"tags": ["Devices"],
-				"summary": "Get Device Info",
-				"description": "Endpoint ini digunakan untuk mendapatkan informasi pada sebuah device berdasarkan DEVICE_ID.",
+				"summary": "Devices Status",
+				"description": "Endpoint ini untuk melihat semua devices yang sudah dibuat oleh akun anda. Maksimum data yang dikembalikan per page adalah 10 item. Item terkahir yang dikembalikan per halaman ada pada properti last_key. Properti ini kemudian dapat digunakan untuk merequest halaman berikutnya dengan menggunakan query string parameter start_key. Jika nilai dari last_key adalah null maka data sudah habis dan ini adalah halaman terakhir.",
 				"parameters": [
 					{
-						"$ref": "#/components/parameters/device_id"
-					}
-				],
-				"requestBody": {
-					"description": "ID dari device yang ingin dicek.",
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/device_id"
-							},
-							"examples": {
-								"iphone-x": {
-									"description": "Device ID dari iPhone X",
-									"value": {
-										"device_id": "iphone-x"
-									}
-								},
-								"iphone-xr": {
-									"description": "Device ID dari iPhone XR",
-									"value": {
-										"device_id": "iphone-xr"
-									}
-								}
-							}
+						"name": "device_id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/String"
 						}
 					}
-				},
+				],
 				"responses": {
 					"200": {
-						"description": "OK",
+						"description": "200 OK",
 						"content": {
 							"application/json": {
 								"schema": {
-									"type": "object",
-									"additionalProperties": false,
-									"properties": {
-										"id": {
-											"type": "string",
-											"maxLength": 100,
-											"pattern": "[\\n\\s\\w\\W^$]"
-										},
-										"status": {
-											"type": "string",
-											"maxLength": 100,
-											"pattern": "[\\n\\s\\w\\W^$]"
-										},
-										"created_at": {
-											"type": "string",
-											"maxLength": 100,
-											"pattern": "[\\n\\s\\w\\W^$]"
-										},
-										"connected_at": {
-											"type": "string",
-											"maxLength": 100,
-											"pattern": "[\\n\\s\\w\\W^$]"
-										},
-										"disconnected_at": {
-											"type": "string",
-											"maxLength": 100,
-											"pattern": "[\\n\\s\\w\\W^$]"
-										},
-										"disconnected_reason": {
-											"type": "string",
-											"maxLength": 100,
-											"pattern": "[\\n\\s\\w\\W^$]"
-										}
-									}
+									"$ref": "#/components/schemas/2XX"
 								},
 								"examples": {
-									"success": {
-										"description": "Success Add device",
-										"value": {
-											"id": "iphone-x-pro",
-											"status": "disconnected",
-											"created_at": "2021-07-09T15:11:53.657Z",
-											"connected_at": "2021-07-18T13:26:57.698Z",
-											"disconnected_at": "2021-07-18T13:27:33.089Z",
-											"disconnected_reason": "Send message timeout."
-										}
+									"DeviceStatus": {
+										"$ref": "#/components/examples/DeviceStatus"
 									}
 								}
 							}
 						}
 					},
 					"400": {
-						"description": "Bad Request",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/error"
-								},
-								"examples": {
-									"BadRequest": {
-										"$ref": "#/components/examples/BadRequest"
-									}
-								}
-							}
-						}
+						"$ref": "#/components/responses/BadRequest"
 					},
 					"401": {
-						"description": "Unauthorized",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/error"
-								},
-								"examples": {
-									"Unauthorized": {
-										"$ref": "#/components/examples/Unauthorized"
-									}
-								}
-							}
-						}
+						"$ref": "#/components/responses/Unauthorized"
 					},
 					"403": {
-						"description": "Bad Request",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/error"
-								},
-								"examples": {
-									"Forbidden": {
-										"$ref": "#/components/examples/Forbidden"
-									}
-								}
-							}
-						}
+						"$ref": "#/components/responses/Forbidden"
 					},
 					"404": {
-						"description": "Not Found",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/error"
-								},
-								"examples": {
-									"Forbidden": {
-										"$ref": "#/components/examples/NotFound"
-									}
-								}
-							}
-						}
+						"$ref": "#/components/responses/NotFound"
 					},
 					"default": {
-						"description": "Success",
-						"content": {
-							"application/json": {
-								"schema": {
-									"additionalProperties": false,
-									"type": "object",
-									"properties": {
-										"success": {
-											"type": "boolean"
-										},
-										"message": {
-											"type": "string",
-											"maxLength": 100,
-											"pattern": "[\\n\\s\\w\\W^$]"
-										},
-										"data": {
-											"type": "object",
-											"additionalProperties": false
-										}
-									}
-								},
-								"examples": {
-									"defaultResponse": {
-										"$ref": "#/components/examples/defaultResponse"
-									}
-								}
-							}
-						}
+						"$ref": "#/components/responses/DefaultResponse"
 					}
 				}
 			},
@@ -573,396 +187,488 @@
 					}
 				],
 				"tags": ["Devices"],
-				"summary": "Delete Device",
-				"description": "Endpoint ini digunakan untuk menghapus sebuah device berdasarkan DEVICE_ID. Setelah device dihapus maka request berikutnya seperti mengirim pesan yang menggunakan DEVICE_ID akan gagal.",
+				"summary": "Devices Status",
+				"description": "Endpoint ini untuk melihat semua devices yang sudah dibuat oleh akun anda. Maksimum data yang dikembalikan per page adalah 10 item. Item terkahir yang dikembalikan per halaman ada pada properti last_key. Properti ini kemudian dapat digunakan untuk merequest halaman berikutnya dengan menggunakan query string parameter start_key. Jika nilai dari last_key adalah null maka data sudah habis dan ini adalah halaman terakhir.",
 				"parameters": [
 					{
-						"$ref": "#/components/parameters/device_id"
-					}
-				],
-				"requestBody": {
-					"description": "ID dari device yang ingin ditambahkan.",
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/device_id"
-							},
-							"examples": {
-								"iphone-x": {
-									"description": "Device ID dari iPhone X",
-									"value": {
-										"device_id": "iphone-x"
-									}
-								},
-								"iphone-xr": {
-									"description": "Device ID dari iPhone XR",
-									"value": {
-										"device_id": "iphone-xr"
-									}
-								}
-							}
+						"name": "device_id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/String"
 						}
 					}
-				},
+				],
 				"responses": {
 					"204": {
-						"description": "HTTP/1.1 204 No Content"
+						"$ref": "#/components/responses/204"
 					},
 					"400": {
-						"description": "Bad Request",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/error"
-								},
-								"examples": {
-									"BadRequest": {
-										"$ref": "#/components/examples/BadRequest"
-									}
-								}
-							}
-						}
+						"$ref": "#/components/responses/BadRequest"
 					},
 					"401": {
-						"description": "Unauthorized",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/error"
-								},
-								"examples": {
-									"Unauthorized": {
-										"$ref": "#/components/examples/Unauthorized"
-									}
-								}
-							}
-						}
+						"$ref": "#/components/responses/Unauthorized"
 					},
 					"403": {
-						"description": "Bad Request",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/error"
-								},
-								"examples": {
-									"Forbidden": {
-										"$ref": "#/components/examples/Forbidden"
-									}
-								}
-							}
-						}
+						"$ref": "#/components/responses/Forbidden"
 					},
 					"404": {
-						"description": "Not Found",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/error"
-								},
-								"examples": {
-									"Forbidden": {
-										"$ref": "#/components/examples/NotFound"
-									}
-								}
-							}
-						}
+						"$ref": "#/components/responses/NotFound"
 					},
 					"default": {
-						"description": "Success",
-						"content": {
-							"application/json": {
-								"schema": {
-									"additionalProperties": false,
-									"type": "object",
-									"properties": {
-										"success": {
-											"type": "boolean"
-										},
-										"message": {
-											"type": "string",
-											"maxLength": 100,
-											"pattern": "[\\n\\s\\w\\W^$]"
-										},
-										"data": {
-											"type": "object",
-											"additionalProperties": false
-										}
-									}
-								},
-								"examples": {
-									"defaultResponse": {
-										"$ref": "#/components/examples/defaultResponse"
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/qr": {
-			"description": "Endpoint ini digunakan untuk mendapatkan QR code yang digunakan untuk melakukan pairing device ke API.",
-			"get": {
-				"security": [
-					{
-						"bearerAuth": []
-					}
-				],
-				"tags": ["QR"],
-				"summary": "Get QR Code",
-				"description": "Endpoint ini digunakan untuk mendapatkan QR code yang digunakan untuk melakukan pairing device ke API.",
-				"parameters": [
-					{
-						"$ref": "#/components/parameters/device_id_query"
-					}
-				],
-				"requestBody": {
-					"description": "WhatsApp device yang akan dikoneksikan atau dipairing dengan API",
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/device_id"
-							},
-							"examples": {
-								"iphone-x": {
-									"description": "Device ID dari iPhone X",
-									"value": {
-										"device_id": "iphone-x"
-									}
-								},
-								"iphone-xr": {
-									"description": "Device ID dari iPhone XR",
-									"value": {
-										"device_id": "iphone-xr"
-									}
-								}
-							}
-						}
-					}
-				},
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "object",
-									"additionalProperties": false,
-									"properties": {
-										"meta": {
-											"type": "object",
-											"additionalProperties": false,
-											"properties": {
-												"qr_code": {
-													"type": "string",
-													"maxLength": 500,
-													"pattern": "[ -//._=,+?&}{/[/A-Za-z0-9:\"\"@%\\n\\s\\w\\W^$]"
-												},
-												"image_url": {
-													"type": "string",
-													"maxLength": 500,
-													"pattern": "[ -//._=,+?&}{/[/A-Za-z0-9:\"\"@%\\n\\s\\w\\W^$]"
-												}
-											}
-										}
-									}
-								},
-								"examples": {
-									"success": {
-										"description": "Success",
-										"value": {
-											"qr_code": "1@U2tS5Q1elzj6Y7IAKDurwvja47S",
-											"image_url": "qrcode=1%40U2tS5Q1elzj6Y7IAKDurwvja47S"
-										}
-									}
-								}
-							}
-						}
-					},
-					"400": {
-						"description": "Bad Request",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/error"
-								},
-								"examples": {
-									"BadRequest": {
-										"$ref": "#/components/examples/BadRequest"
-									}
-								}
-							}
-						}
-					},
-					"401": {
-						"description": "Unauthorized",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/error"
-								},
-								"examples": {
-									"Unauthorized": {
-										"$ref": "#/components/examples/Unauthorized"
-									}
-								}
-							}
-						}
-					},
-					"403": {
-						"description": "Bad Request",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/error"
-								},
-								"examples": {
-									"Forbidden": {
-										"$ref": "#/components/examples/Forbidden"
-									}
-								}
-							}
-						}
-					},
-					"404": {
-						"description": "Not Found",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/error"
-								},
-								"examples": {
-									"Forbidden": {
-										"$ref": "#/components/examples/NotFound"
-									}
-								}
-							}
-						}
-					},
-					"default": {
-						"description": "Success",
-						"content": {
-							"application/json": {
-								"schema": {
-									"additionalProperties": false,
-									"type": "object",
-									"properties": {
-										"success": {
-											"type": "boolean"
-										},
-										"message": {
-											"type": "string",
-											"maxLength": 100,
-											"pattern": "[\\n\\s\\w\\W^$]"
-										},
-										"data": {
-											"type": "object",
-											"additionalProperties": false
-										}
-									}
-								},
-								"examples": {
-									"defaultResponse": {
-										"$ref": "#/components/examples/defaultResponse"
-									}
-								}
-							}
-						}
+						"$ref": "#/components/responses/204"
 					}
 				}
 			}
 		}
 	},
 	"components": {
-		"parameters": {
-			"device_id": {
-				"name": "device_id",
-				"in": "path",
-				"description": "Device ID",
+		"parameters": {},
+		"requestBodies": {
+			"DeviceID": {
+				"description": "ID dari device yang ingin ditambahkan.",
 				"required": true,
-				"schema": {
-					"type": "string",
-					"maxLength": 100,
-					"pattern": "[\\n\\s\\w\\W^$]"
-				},
-				"example": "iphone-x"
-			},
-			"device_id_query": {
-				"name": "device_id",
-				"in": "query",
-				"description": "Device ID",
-				"required": true,
-				"schema": {
-					"type": "string",
-					"maxLength": 100,
-					"pattern": "[\\n\\s\\w\\W^$]"
-				},
-				"example": "iphone-x"
+				"content": {
+					"application/json": {
+						"schema": {
+							"type": "object",
+							"additionalProperties": false,
+							"properties": {
+								"device_id": {
+									"type": "string",
+									"maxLength": 500,
+									"pattern": "[\\n\\s\\w\\W^$]"
+								}
+							},
+							"example": {
+								"device_id": "iphone-x-pro"
+							}
+						}
+					}
+				}
 			}
 		},
-		"examples": {
-			"defaultResponse": {
-				"description": "400 Bad Request",
-				"summary": "Device id already exists, choose another one",
-				"value": {
-					"success": true,
-					"message": "Success.",
-					"data": {}
+		"responses": {
+			"DefaultResponse": {
+				"description": "200 Success",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/2XX"
+						},
+						"examples": {
+							"BadRequest": {
+								"$ref": "#/components/examples/Success"
+							}
+						}
+					}
 				}
+			},
+			"202": {
+				"description": "202 Accepted",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/2XX"
+						},
+						"examples": {
+							"BadRequest": {
+								"$ref": "#/components/examples/Success"
+							}
+						}
+					}
+				}
+			},
+			"204": {
+				"description": "204 No Content"
 			},
 			"BadRequest": {
 				"description": "400 Bad Request",
-				"summary": "Device id already exists, choose another one",
-				"value": {
-					"message": "Error: Device id already exists, choose another one."
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/4XX"
+						},
+						"examples": {
+							"BadRequest": {
+								"$ref": "#/components/examples/BadRequest"
+							}
+						}
+					}
 				}
 			},
 			"Unauthorized": {
 				"description": "401 Missing API token.",
-				"summary": "API Token is missing/not provided",
-				"value": {
-					"message": "Missing API token."
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/4XX"
+						},
+						"examples": {
+							"Unauthorized": {
+								"$ref": "#/components/examples/Unauthorized"
+							}
+						}
+					}
 				}
 			},
 			"Forbidden": {
 				"description": "403 Invalid API token.",
-				"summary": "API Token is invalid",
-				"value": {
-					"message": "Invalid API token."
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/4XX"
+						},
+						"examples": {
+							"Forbidden": {
+								"$ref": "#/components/examples/Forbidden"
+							}
+						}
+					}
 				}
 			},
 			"NotFound": {
 				"description": "404 Not Found",
-				"summary": "Not Found.",
-				"value": {
-					"message": "Error: Device not found."
-				}
-			}
-		},
-		"responses": {},
-		"schemas": {
-			"device_id": {
-				"type": "object",
-				"additionalProperties": false,
-				"properties": {
-					"device_id": {
-						"type": "string",
-						"maxLength": 500,
-						"pattern": "[\\n\\s\\w\\W^$]"
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/4XX"
+						},
+						"examples": {
+							"NotFound": {
+								"$ref": "#/components/examples/NotFound"
+							}
+						}
 					}
 				}
 			},
-			"error": {
+			"NotAcceptable": {
+				"description": "406 Not Acceptable",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/4XX"
+						},
+						"examples": {
+							"NotFound": {
+								"$ref": "#/components/examples/NotFound"
+							}
+						}
+					}
+				}
+			},
+			"UnsupportedMediaType": {
+				"description": "415 Unsupported Media Type",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/4XX"
+						},
+						"examples": {
+							"NotFound": {
+								"$ref": "#/components/examples/NotFound"
+							}
+						}
+					}
+				}
+			},
+			"TooManyRequests": {
+				"description": "429 Too Many Requests",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/4XX"
+						},
+						"examples": {
+							"NotFound": {
+								"$ref": "#/components/examples/NotFound"
+							}
+						}
+					}
+				}
+			}
+		},
+		"schemas": {
+			"2XX": {
 				"additionalProperties": false,
+				"required": ["message", "data"],
 				"type": "object",
 				"properties": {
 					"message": {
 						"type": "string",
 						"maxLength": 500,
 						"pattern": "[\\n\\s\\w\\W^$]"
+					},
+					"data": {
+						"type": "object",
+						"additionalProperties": false,
+						"properties": {
+							"id": {
+								"type": "string",
+								"maxLength": 500,
+								"pattern": "[\\n\\s\\w\\W^$]"
+							},
+							"status": {
+								"type": "string",
+								"maxLength": 500,
+								"pattern": "[\\n\\s\\w\\W^$]"
+							},
+							"created_at": {
+								"type": "string",
+								"maxLength": 500,
+								"pattern": "[\\n\\s\\w\\W^$]"
+							},
+							"connected_at": {
+								"type": "string",
+								"maxLength": 500,
+								"pattern": "[\\n\\s\\w\\W^$]"
+							},
+							"disconnected_at": {
+								"type": "string",
+								"maxLength": 500,
+								"pattern": "[\\n\\s\\w\\W^$]"
+							},
+							"disconnected_reason": {
+								"type": "string",
+								"maxLength": 500,
+								"pattern": "[\\n\\s\\w\\W^$]"
+							},
+							"devices": {
+								"type": "array",
+								"minItems": 1,
+								"maxItems": 10,
+								"items": {
+									"type": "object",
+									"additionalProperties": false,
+									"properties": {
+										"id": {
+											"type": "string",
+											"maxLength": 500,
+											"pattern": "[\\n\\s\\w\\W^$]"
+										},
+										"status": {
+											"type": "string",
+											"maxLength": 500,
+											"pattern": "[\\n\\s\\w\\W^$]"
+										},
+										"created_at": {
+											"type": "string",
+											"maxLength": 500,
+											"pattern": "[\\n\\s\\w\\W^$]"
+										},
+										"connected_at": {
+											"type": "string",
+											"maxLength": 500,
+											"pattern": "[\\n\\s\\w\\W^$]"
+										},
+										"disconnected_at": {
+											"type": "string",
+											"maxLength": 500,
+											"pattern": "[\\n\\s\\w\\W^$]"
+										},
+										"disconnected_reason": {
+											"type": "string",
+											"maxLength": 500,
+											"pattern": "[\\n\\s\\w\\W^$]"
+										}
+									}
+								}
+							},
+							"meta": {
+								"type": "object",
+								"additionalProperties": false,
+								"properties": {
+									"location": {
+										"type": "string",
+										"maxLength": 500,
+										"pattern": "[\\n\\s\\w\\W^$]"
+									},
+									"number_of_messages": {
+										"type": "integer",
+										"minimum": 1
+									},
+									"last_key": {
+										"type": "string",
+										"maxLength": 500,
+										"nullable": true,
+										"pattern": "[\\n\\s\\w\\W^$]"
+									}
+								}
+							}
+						}
+					},
+					"page": {
+						"type": "object",
+						"additionalProperties": false,
+						"properties": {
+							"current": {
+								"type": "integer",
+								"minimum": 1
+							},
+							"total": {
+								"type": "integer",
+								"minimum": 0
+							},
+							"limit": {
+								"type": "integer",
+								"minimum": 1
+							},
+							"total_data": {
+								"type": "integer",
+								"minimum": 0
+							}
+						}
+					}
+				}
+			},
+			"4XX": {
+				"additionalProperties": false,
+				"required": ["message", "errors"],
+				"type": "object",
+				"properties": {
+					"message": {
+						"type": "string",
+						"maxLength": 500,
+						"pattern": "[\\n\\s\\w\\W^$]"
+					},
+					"errors": {
+						"type": "object",
+						"additionalProperties": false,
+						"properties": {
+							"token": {
+								"type": "string",
+								"maxLength": 500,
+								"pattern": "[\\n\\s\\w\\W^$]"
+							},
+							"device_id": {
+								"type": "string",
+								"maxLength": 500,
+								"pattern": "[\\n\\s\\w\\W^$]"
+							}
+						}
+					}
+				}
+			},
+			"String": {
+				"type": "string",
+				"maxLength": 500,
+				"pattern": "[\\n\\s\\w\\W^$]",
+				"x-42c-sample": "iphone-x"
+			}
+		},
+		"examples": {
+			"DeviceList": {
+				"description": "Show All Devices list",
+				"summary": "OK",
+				"value": {
+					"message": "Success.",
+					"data": {
+						"devices": [
+							{
+								"id": "iphone-x-pro",
+								"status": "disconnected",
+								"created_at": "2021-07-09T15:11:53.657Z",
+								"connected_at": "2021-07-18T13:26:57.698Z",
+								"disconnected_at": "2021-07-18T13:27:33.089Z",
+								"disconnected_reason": "Send message timeout."
+							},
+							{
+								"id": "zenfone-red-1",
+								"status": "disconnected",
+								"created_at": "2021-07-09T08:40:58.070Z",
+								"connected_at": "2021-07-19T13:26:57.698Z",
+								"disconnected_at": "2021-07-19T13:27:33.089Z",
+								"disconnected_reason": "Send message timeout."
+							}
+						]
+					},
+					"page": {
+						"current": 1,
+						"total": 10,
+						"limit": 10,
+						"total_data": 100
+					}
+				}
+			},
+			"DeviceStatus": {
+				"description": "Get Devices Status",
+				"summary": "disconnected",
+				"value": {
+					"message": "Success.",
+					"data": {
+						"id": "iphone-x-pro",
+						"status": "disconnected",
+						"created_at": "2021-07-09T15:11:53.657Z",
+						"connected_at": "2021-07-18T13:26:57.698Z",
+						"disconnected_at": "2021-07-18T13:27:33.089Z",
+						"disconnected_reason": "Send message timeout."
+					}
+				}
+			},
+			"Success": {
+				"description": "OK",
+				"summary": "OK",
+				"value": {
+					"message": "Success.",
+					"data": {}
+				}
+			},
+			"Created": {
+				"description": "Created",
+				"summary": "Created",
+				"value": {
+					"message": "Success.",
+					"data": {
+						"id": "iphone-x-pro",
+						"status": "disconnected",
+						"created_at": "2021-07-09T15:11:53.657Z",
+						"meta": {
+							"location": "https://api.kirimwa.id/v1/devices/iphone-x-pro"
+						}
+					},
+					"page": {
+						"current": 1,
+						"total": 10,
+						"limit": 10,
+						"total_data": 100
+					}
+				}
+			},
+			"BadRequest": {
+				"description": "400 Bad Request",
+				"summary": "Bad Request",
+				"value": {
+					"message": "Bad Request",
+					"errors": {}
+				}
+			},
+			"Unauthorized": {
+				"description": "401 Missing API token.",
+				"summary": "API Token is missing/not provided",
+				"value": {
+					"message": "Missing API token.",
+					"errors": {
+						"token": "Missing API token."
+					}
+				}
+			},
+			"Forbidden": {
+				"description": "403 Invalid API token.",
+				"summary": "API Token is invalid",
+				"value": {
+					"message": "Invalid API token.",
+					"errors": {
+						"token": "Invalid API token."
+					}
+				}
+			},
+			"NotFound": {
+				"description": "404 Not Found",
+				"summary": "Not Found.",
+				"value": {
+					"message": "Device not found.",
+					"errors": {
+						"device_id": "Device not found."
 					}
 				}
 			}
