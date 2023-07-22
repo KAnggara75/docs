@@ -235,6 +235,7 @@
 					{
 						"name": "device_id",
 						"in": "query",
+						"description": "ID WhatsApp device yang akan dikoneksikan atau dipairing dengan API KirimWA.id.",
 						"required": true,
 						"schema": {
 							"$ref": "#/components/schemas/String"
@@ -274,10 +275,107 @@
 					}
 				}
 			}
+		},
+		"/group": {
+			"get": {
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"tags": ["Group"],
+				"summary": "Get Group List",
+				"description": "Endpoint ini digunakan untuk mendapatkan daftar group yang ada.",
+				"responses": {
+					"200": {
+						"description": "200 OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/2XX"
+								},
+								"examples": {
+									"GroupList": {
+										"$ref": "#/components/examples/GroupList"
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"$ref": "#/components/responses/BadRequest"
+					},
+					"401": {
+						"$ref": "#/components/responses/Unauthorized"
+					},
+					"403": {
+						"$ref": "#/components/responses/Forbidden"
+					},
+					"404": {
+						"$ref": "#/components/responses/NotFound"
+					},
+					"default": {
+						"$ref": "#/components/responses/DefaultResponse"
+					}
+				}
+			}
+		},
+		"/group/{group_id}": {
+			"get": {
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"tags": ["Group"],
+				"summary": "Get Group Details",
+				"description": "Endpoint ini digunakan untuk mendapatkan daftar anggota dan metadata pada sebuah grup berdasarkan GROUP_ID.",
+				"parameters": [
+					{
+						"name": "group_id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/String"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "200 OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/2XX"
+								},
+								"examples": {
+									"GroupDetail": {
+										"$ref": "#/components/examples/GroupDetail"
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"$ref": "#/components/responses/BadRequest"
+					},
+					"401": {
+						"$ref": "#/components/responses/Unauthorized"
+					},
+					"403": {
+						"$ref": "#/components/responses/Forbidden"
+					},
+					"404": {
+						"$ref": "#/components/responses/NotFound"
+					},
+					"default": {
+						"$ref": "#/components/responses/DefaultResponse"
+					}
+				}
+			}
 		}
 	},
 	"components": {
-		"parameters": {},
 		"requestBodies": {
 			"DeviceID": {
 				"description": "ID dari device yang ingin ditambahkan.",
@@ -287,6 +385,7 @@
 						"schema": {
 							"type": "object",
 							"additionalProperties": false,
+							"required": ["device_id"],
 							"properties": {
 								"device_id": {
 									"type": "string",
@@ -467,6 +566,11 @@
 								"maxLength": 500,
 								"pattern": "[\\n\\s\\w\\W^$]"
 							},
+							"message": {
+								"type": "string",
+								"maxLength": 500,
+								"pattern": "[\\n\\s\\w\\W^$]"
+							},
 							"created_at": {
 								"type": "string",
 								"maxLength": 500,
@@ -538,6 +642,37 @@
 									}
 								}
 							},
+							"group": {
+								"type": "array",
+								"minItems": 1,
+								"maxItems": 10,
+								"items": {
+									"type": "object",
+									"additionalProperties": false,
+									"properties": {
+										"id": {
+											"type": "string",
+											"maxLength": 500,
+											"pattern": "[\\n\\s\\w\\W^$]"
+										},
+										"name": {
+											"type": "string",
+											"maxLength": 500,
+											"pattern": "[\\n\\s\\w\\W^$]"
+										}
+									}
+								}
+							},
+							"members": {
+								"type": "array",
+								"minItems": 1,
+								"maxItems": 10,
+								"items": {
+									"type": "string",
+									"maxLength": 500,
+									"pattern": "[\\n\\s\\w\\W^$]"
+								}
+							},
 							"meta": {
 								"type": "object",
 								"additionalProperties": false,
@@ -550,6 +685,32 @@
 									"number_of_messages": {
 										"type": "integer",
 										"minimum": 1
+									},
+									"number_of_participants": {
+										"type": "integer",
+										"minimum": 1
+									},
+									"name": {
+										"type": "string",
+										"maxLength": 500,
+										"nullable": true,
+										"pattern": "[\\n\\s\\w\\W^$]"
+									},
+									"admins": {
+										"type": "array",
+										"minItems": 1,
+										"maxItems": 1024,
+										"items": {
+											"type": "string",
+											"maxLength": 500,
+											"pattern": "[\\n\\s\\w\\W^$]"
+										}
+									},
+									"created_at": {
+										"type": "string",
+										"maxLength": 500,
+										"nullable": true,
+										"pattern": "[\\n\\s\\w\\W^$]"
 									},
 									"last_key": {
 										"type": "string",
@@ -677,6 +838,55 @@
 					"data": {
 						"qr_code": "1@U2tS5Q1elzj6Y7IAKDurwvja47SQz8bvW24fb43r3n+gPC4PN1iSNlGLizlfGsrHSD/M6ym6/aYiYw==,xXlcsqVquva7/1c2g8wAZkWdnk2el5tHWh7MWUW2UTc=,v+P3exsbB1W62wX3Vn4dcC==",
 						"image_url": "https://api.kirimwa.id/v1/qr/show?qrcode=1%40U2tS5Q1elzj6Y7IAKDurwvja47SQz8bvW24fb43r3n%2BgPC4PN1iSNlGLizlfGsrHSD%2FM6ym6%2FaYiYw%3D%3D%2CxXlcsqVquva7%2F1c2g8wAZkWdnk2el5tHWh7MWUW2UTc%3D%2Cv%2BP3exsbB1W62wX3Vn4dcC%3D%3D&device_id=YOUR_DEVICE_ID"
+					}
+				}
+			},
+			"GroupList": {
+				"description": "Get Group List",
+				"summary": "Get Group List",
+				"value": {
+					"message": "Contacts has been synced.",
+					"data": {
+						"group": [
+							{
+								"id": "6281234567890-1628639680",
+								"name": "Grup Keluarga Besar"
+							},
+							{
+								"id": "6281234567890-1628639662",
+								"name": "Developer Tim"
+							}
+						]
+					}
+				}
+			},
+			"GroupDetail": {
+				"description": "Get Group Detail",
+				"summary": "Get Group Detail",
+				"value": {
+					"message": "Get Group Detail",
+					"data": {
+						"members": [
+							"6281234567890",
+							"6281234567891",
+							"6281234567892",
+							"6281234567893",
+							"6281234567894",
+							"6281234567895"
+						],
+						"meta": {
+							"name": "Grup Keluarga Besar",
+							"admins": [
+								"6281234567890",
+								"6281234567891",
+								"6281234567892",
+								"6281234567893",
+								"6281234567894",
+								"6281234567895"
+							],
+							"created_at": "2019-09-22T12:31:30.000Z",
+							"number_of_participants": 6
+						}
 					}
 				}
 			},
