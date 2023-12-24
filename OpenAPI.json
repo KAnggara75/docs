@@ -1,0 +1,1949 @@
+{
+	"openapi": "3.0.3",
+	"info": {
+		"version": "0.0.1-alpha",
+		"title": "PakaiWA",
+		"description": "Unofficial WhatsApp API by KAnggara",
+		"contact": {
+			"name": "Kelvin Anggara",
+			"email": "kanggara@pakaiwa.id",
+			"url": "https://kanggara.me"
+		},
+		"license": {
+			"name": "MIT",
+			"url": "https://docs.pakaiwa.id/LICENSE.md"
+		}
+	},
+	"servers": [
+		{
+			"description": "UnOfficial WhatsApp API",
+			"url": "https://{environment}.pakaiwa.id/{version}",
+			"variables": {
+				"environment": {
+					"description": "Server Environment",
+					"default": "api",
+					"enum": ["dev", "test", "api"]
+				},
+				"version": {
+					"description": "API Version",
+					"default": "v1",
+					"enum": ["v1", "v2"]
+				}
+			}
+		}
+	],
+	"externalDocs": {
+		"description": "Find out more about WhatsAPI",
+		"url": "https://docs.pakaiwa.id"
+	},
+	"paths": {
+		"/devices": {
+			"description": "Sebelum dapat mengirim pesan menggunakan API PakaiWA.id maka anda perlu menambahkan device terlebih dahulu. Anda dapat memiliki lebih dari satu device pada API PakaiWA.id. Sebuah device harusnya terasosiasi dengan sebuah nomor WhatsApp.",
+			"post": {
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"tags": ["Devices"],
+				"summary": "Add Devices",
+				"description": "Endpoint ini untuk menambahkan device baru yang bisa digunakan untuk pairing ke API KirimWA.id.",
+				"requestBody": {
+					"$ref": "#/components/requestBodies/DeviceID"
+				},
+				"responses": {
+					"201": {
+						"description": "201 Created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/2XX"
+								},
+								"examples": {
+									"Created": {
+										"$ref": "#/components/examples/Created"
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"$ref": "#/components/responses/BadRequest"
+					},
+					"401": {
+						"$ref": "#/components/responses/Unauthorized"
+					},
+					"403": {
+						"$ref": "#/components/responses/Forbidden"
+					},
+					"404": {
+						"$ref": "#/components/responses/NotFound"
+					},
+					"default": {
+						"$ref": "#/components/responses/DefaultResponse"
+					}
+				}
+			},
+			"get": {
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"tags": ["Devices"],
+				"summary": "Devices List",
+				"description": "Endpoint ini untuk melihat semua devices yang sudah dibuat oleh akun anda. Maksimum data yang dikembalikan per page adalah 10 item. Item terkahir yang dikembalikan per halaman ada pada properti last_key. Properti ini kemudian dapat digunakan untuk merequest halaman berikutnya dengan menggunakan query string parameter start_key. Jika nilai dari last_key adalah null maka data sudah habis dan ini adalah halaman terakhir.",
+				"responses": {
+					"200": {
+						"description": "200 OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/2XX"
+								},
+								"examples": {
+									"DeviceList": {
+										"$ref": "#/components/examples/DeviceList"
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"$ref": "#/components/responses/BadRequest"
+					},
+					"401": {
+						"$ref": "#/components/responses/Unauthorized"
+					},
+					"403": {
+						"$ref": "#/components/responses/Forbidden"
+					},
+					"404": {
+						"$ref": "#/components/responses/NotFound"
+					},
+					"default": {
+						"$ref": "#/components/responses/DefaultResponse"
+					}
+				}
+			}
+		},
+		"/devices/{device_id}": {
+			"get": {
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"tags": ["Devices"],
+				"summary": "Devices Status",
+				"description": "Endpoint ini digunakan untuk mendapatkan informasi pada sebuah device berdasarkan DEVICE_ID.",
+				"parameters": [
+					{
+						"name": "device_id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/String"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "200 OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/2XX"
+								},
+								"examples": {
+									"DeviceStatus": {
+										"$ref": "#/components/examples/DeviceStatus"
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"$ref": "#/components/responses/BadRequest"
+					},
+					"401": {
+						"$ref": "#/components/responses/Unauthorized"
+					},
+					"403": {
+						"$ref": "#/components/responses/Forbidden"
+					},
+					"404": {
+						"$ref": "#/components/responses/NotFound"
+					},
+					"default": {
+						"$ref": "#/components/responses/DefaultResponse"
+					}
+				}
+			},
+			"delete": {
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"tags": ["Devices"],
+				"summary": "Delete Devices",
+				"description": "Endpoint ini digunakan untuk menghapus sebuah device berdasarkan DEVICE_ID. Setelah device dihapus maka request berikutnya seperti mengirim pesan yang menggunakan DEVICE_ID akan gagal.",
+				"parameters": [
+					{
+						"name": "device_id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/String"
+						}
+					}
+				],
+				"responses": {
+					"204": {
+						"$ref": "#/components/responses/204"
+					},
+					"400": {
+						"$ref": "#/components/responses/BadRequest"
+					},
+					"401": {
+						"$ref": "#/components/responses/Unauthorized"
+					},
+					"403": {
+						"$ref": "#/components/responses/Forbidden"
+					},
+					"404": {
+						"$ref": "#/components/responses/NotFound"
+					},
+					"default": {
+						"$ref": "#/components/responses/DefaultResponse"
+					}
+				}
+			}
+		},
+		"/qr": {
+			"get": {
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"tags": ["QR Code"],
+				"summary": "Devices Status",
+				"description": "Endpoint ini digunakan untuk mendapatkan QR code yang digunakan untuk melakukan pairing device ke API KirimWA.id. Terdapat dua atribut yang dikembalikan yaitu qr_code dan image_url. Untuk menampilkan gambar QR Code kunjungi link URL yang ada terdapat pada image_url kemudian scan QR code tersebut dengan WhatsApp.",
+				"parameters": [
+					{
+						"name": "device_id",
+						"in": "query",
+						"description": "ID WhatsApp device yang akan dikoneksikan atau dipairing dengan API KirimWA.id.",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/String"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "200 OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/2XX"
+								},
+								"examples": {
+									"QRCode": {
+										"$ref": "#/components/examples/QRCode"
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"$ref": "#/components/responses/BadRequest"
+					},
+					"401": {
+						"$ref": "#/components/responses/Unauthorized"
+					},
+					"403": {
+						"$ref": "#/components/responses/Forbidden"
+					},
+					"404": {
+						"$ref": "#/components/responses/NotFound"
+					},
+					"default": {
+						"$ref": "#/components/responses/DefaultResponse"
+					}
+				}
+			}
+		},
+		"/group": {
+			"get": {
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"tags": ["Group"],
+				"summary": "Get Group List",
+				"description": "Endpoint ini digunakan untuk mendapatkan daftar group yang ada.",
+				"responses": {
+					"200": {
+						"description": "200 OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/2XX"
+								},
+								"examples": {
+									"GroupList": {
+										"$ref": "#/components/examples/GroupList"
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"$ref": "#/components/responses/BadRequest"
+					},
+					"401": {
+						"$ref": "#/components/responses/Unauthorized"
+					},
+					"403": {
+						"$ref": "#/components/responses/Forbidden"
+					},
+					"404": {
+						"$ref": "#/components/responses/NotFound"
+					},
+					"default": {
+						"$ref": "#/components/responses/DefaultResponse"
+					}
+				}
+			}
+		},
+		"/group/{group_id}": {
+			"get": {
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"tags": ["Group"],
+				"summary": "Get Group Details",
+				"description": "Endpoint ini digunakan untuk mendapatkan daftar anggota dan metadata pada sebuah grup berdasarkan GROUP_ID.",
+				"parameters": [
+					{
+						"name": "group_id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/String"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "200 OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/2XX"
+								},
+								"examples": {
+									"GroupDetail": {
+										"$ref": "#/components/examples/GroupDetail"
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"$ref": "#/components/responses/BadRequest"
+					},
+					"401": {
+						"$ref": "#/components/responses/Unauthorized"
+					},
+					"403": {
+						"$ref": "#/components/responses/Forbidden"
+					},
+					"404": {
+						"$ref": "#/components/responses/NotFound"
+					},
+					"default": {
+						"$ref": "#/components/responses/DefaultResponse"
+					}
+				}
+			}
+		},
+		"/messages": {
+			"post": {
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"tags": ["Messages"],
+				"summary": "Send Message",
+				"description": "Endpoint ini digunakan untuk mengirimkan pesan baik teks, gambar, list, buttons atau dokumen (segala jenis file).",
+				"requestBody": {
+					"$ref": "#/components/requestBodies/SendMessage"
+				},
+				"responses": {
+					"200": {
+						"description": "200 OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/2XX"
+								},
+								"examples": {
+									"GroupList": {
+										"$ref": "#/components/examples/SendMessage"
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"$ref": "#/components/responses/BadRequest"
+					},
+					"401": {
+						"$ref": "#/components/responses/Unauthorized"
+					},
+					"403": {
+						"$ref": "#/components/responses/Forbidden"
+					},
+					"404": {
+						"$ref": "#/components/responses/NotFound"
+					},
+					"default": {
+						"$ref": "#/components/responses/DefaultResponse"
+					}
+				}
+			},
+			"get": {
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"tags": ["Messages"],
+				"summary": "Get All Messages",
+				"description": "Endpoint ini digunakan untuk mendapatkan semua pesan yang dikirim dengan menggunakan endpoint POST /messages. Maksimum data yang dikembalikan per request adalah 10 item. Untuk merequest item berikutnya gunakan nilai dari atribut last_key dan gunakan sebagai input untuk parameter start_key. Jika nilai dari last_key adalah null maka data sudah habis dan ini adalah halaman terakhir.",
+				"parameters": [
+					{
+						"name": "start_key",
+						"description": "Nilai dari last_key yang digunakan untuk merequest halaman berikutnya.",
+						"in": "query",
+						"required": false,
+						"schema": {
+							"$ref": "#/components/schemas/String"
+						}
+					},
+					{
+						"name": "status",
+						"description": "Status pemrosesan pesan yaitu pending, success, atau fail. Default adalah success.",
+						"in": "query",
+						"required": false,
+						"schema": {
+							"$ref": "#/components/schemas/String"
+						}
+					},
+					{
+						"name": "date",
+						"description": "Tanggal pesan dikirim dalam format YYYY-MM-DD, contoh 2021-07-10.",
+						"in": "query",
+						"required": false,
+						"schema": {
+							"$ref": "#/components/schemas/String"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "200 OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/2XX"
+								},
+								"examples": {
+									"MessageList": {
+										"$ref": "#/components/examples/MessageList"
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"$ref": "#/components/responses/BadRequest"
+					},
+					"401": {
+						"$ref": "#/components/responses/Unauthorized"
+					},
+					"403": {
+						"$ref": "#/components/responses/Forbidden"
+					},
+					"404": {
+						"$ref": "#/components/responses/NotFound"
+					},
+					"default": {
+						"$ref": "#/components/responses/DefaultResponse"
+					}
+				}
+			}
+		},
+		"/messages/{messages_id}": {
+			"get": {
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"tags": ["Messages"],
+				"summary": "Get Messages Info",
+				"description": "Endpoint ini digunakan untuk mendapatkan informasi sebuah message berdasarkan MESSAGE_ID.",
+				"parameters": [
+					{
+						"name": "messages_id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/String"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "200 OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/2XX"
+								},
+								"examples": {
+									"MessageInfo": {
+										"$ref": "#/components/examples/MessageInfo"
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"$ref": "#/components/responses/BadRequest"
+					},
+					"401": {
+						"$ref": "#/components/responses/Unauthorized"
+					},
+					"403": {
+						"$ref": "#/components/responses/Forbidden"
+					},
+					"404": {
+						"$ref": "#/components/responses/NotFound"
+					},
+					"default": {
+						"$ref": "#/components/responses/DefaultResponse"
+					}
+				}
+			}
+		},
+		"/incoming-messages": {
+			"get": {
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"tags": ["Messages"],
+				"summary": "Get Incoming Messages",
+				"description": "Endpoint untuk melihat pesan yang masuk ke WhatsApp sesuai dengan device ID.",
+				"parameters": [
+					{
+						"name": "device_id",
+						"in": "query",
+						"description": "Device ID untuk pesan yang masuk.",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/String"
+						}
+					},
+					{
+						"name": "start_key",
+						"in": "query",
+						"description": "Nilai dari last_key yang digunakan untuk merequest halaman berikutnya.",
+						"schema": {
+							"$ref": "#/components/schemas/String"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "200 OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/2XX"
+								},
+								"examples": {
+									"IncomingMessage": {
+										"$ref": "#/components/examples/IncomingMessage"
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"$ref": "#/components/responses/BadRequest"
+					},
+					"401": {
+						"$ref": "#/components/responses/Unauthorized"
+					},
+					"403": {
+						"$ref": "#/components/responses/Forbidden"
+					},
+					"404": {
+						"$ref": "#/components/responses/NotFound"
+					},
+					"default": {
+						"$ref": "#/components/responses/DefaultResponse"
+					}
+				}
+			}
+		},
+		"/batch-messages": {
+			"post": {
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"tags": ["Messages"],
+				"summary": "Send Batch Devices",
+				"description": "Endpoint ini untuk menambahkan device baru yang bisa digunakan untuk pairing ke API KirimWA.id.",
+				"requestBody": {
+					"$ref": "#/components/requestBodies/SendBatchMessage"
+				},
+				"responses": {
+					"200": {
+						"description": "200 OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/2XX"
+								},
+								"examples": {
+									"Created": {
+										"$ref": "#/components/examples/SendBatchMessage"
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"$ref": "#/components/responses/BadRequest"
+					},
+					"401": {
+						"$ref": "#/components/responses/Unauthorized"
+					},
+					"403": {
+						"$ref": "#/components/responses/Forbidden"
+					},
+					"404": {
+						"$ref": "#/components/responses/NotFound"
+					},
+					"default": {
+						"$ref": "#/components/responses/DefaultResponse"
+					}
+				}
+			},
+			"get": {
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"tags": ["Messages"],
+				"summary": "Get Incoming Messages",
+				"description": "Endpoint ini digunakan untuk melihat semua pesan batch yang telah dikirim. Dimana pada setiap pesan batch tersebut terdapat pesan yang sudah diproses processed dan pesan yang gagal dikirim failed.",
+				"parameters": [
+					{
+						"name": "device_id",
+						"in": "query",
+						"description": "Pesan batch yang dikirim berdasarkan device id.",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/String"
+						}
+					},
+					{
+						"name": "start_key",
+						"in": "query",
+						"description": "Nilai dari meta.last_key yang digunakan untuk merequest halaman berikutnya.",
+						"schema": {
+							"$ref": "#/components/schemas/String"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "200 OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/2XX"
+								},
+								"examples": {
+									"GetBathcMessages": {
+										"$ref": "#/components/examples/GetBatchMessages"
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"$ref": "#/components/responses/BadRequest"
+					},
+					"401": {
+						"$ref": "#/components/responses/Unauthorized"
+					},
+					"403": {
+						"$ref": "#/components/responses/Forbidden"
+					},
+					"404": {
+						"$ref": "#/components/responses/NotFound"
+					},
+					"default": {
+						"$ref": "#/components/responses/DefaultResponse"
+					}
+				}
+			}
+		},
+		"/batch-messages/{batch_id}": {
+			"get": {
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"tags": ["Messages"],
+				"summary": "Get Batch Messages Status",
+				"description": "Endpoint ini digunakan untuk melihat pesan batch berdasarkan BATCH_ID. Informasi detil dari tiap-tiap pesan dapat dilihat berdasarkan message id menggunakan endpoint GET /messages/ID.",
+				"parameters": [
+					{
+						"name": "batch_id",
+						"in": "path",
+						"description": "Pesan batch yang dikirim berdasarkan device id.",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/String"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "200 OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/2XX"
+								},
+								"examples": {
+									"GetBatchMessagesStatus": {
+										"$ref": "#/components/examples/GetBatchMessagesStatus"
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"$ref": "#/components/responses/BadRequest"
+					},
+					"401": {
+						"$ref": "#/components/responses/Unauthorized"
+					},
+					"403": {
+						"$ref": "#/components/responses/Forbidden"
+					},
+					"404": {
+						"$ref": "#/components/responses/NotFound"
+					},
+					"default": {
+						"$ref": "#/components/responses/DefaultResponse"
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"requestBodies": {
+			"DeviceID": {
+				"description": "ID dari device yang ingin ditambahkan.",
+				"required": true,
+				"content": {
+					"application/json": {
+						"schema": {
+							"type": "object",
+							"additionalProperties": false,
+							"required": ["device_id"],
+							"properties": {
+								"device_id": {
+									"type": "string",
+									"maxLength": 500,
+									"pattern": "[\\n\\s\\w\\W^$]"
+								}
+							},
+							"example": {
+								"device_id": "iphone-x-pro"
+							}
+						}
+					}
+				}
+			},
+			"SendMessage": {
+				"description": "ID dari device yang ingin ditambahkan.",
+				"required": true,
+				"content": {
+					"application/json": {
+						"schema": {
+							"type": "object",
+							"additionalProperties": false,
+							"required": ["phone_number", "message", "device_id"],
+							"properties": {
+								"phone_number": {
+									"type": "string",
+									"maxLength": 500,
+									"pattern": "[\\n\\s\\w\\W^$]"
+								},
+								"message": {
+									"type": "string",
+									"maxLength": 500,
+									"pattern": "[\\n\\s\\w\\W^$]"
+								},
+								"device_id": {
+									"type": "string",
+									"maxLength": 500,
+									"pattern": "[\\n\\s\\w\\W^$]"
+								},
+								"message_type": {
+									"type": "string",
+									"maxLength": 500,
+									"pattern": "[\\n\\s\\w\\W^$]",
+									"default": "text"
+								},
+								"caption": {
+									"type": "string",
+									"maxLength": 500,
+									"pattern": "[\\n\\s\\w\\W^$]"
+								},
+								"is_group_message": {
+									"type": "boolean",
+									"default": false
+								},
+								"send_at": {
+									"type": "string",
+									"maxLength": 500,
+									"pattern": "[\\n\\s\\w\\W^$]",
+									"default": "now"
+								}
+							},
+							"example": {
+								"phone_number": "6281234567890",
+								"message": "Halo ini adalah pesan dari api.kirimwa.id",
+								"device_id": "iphone-x-pro",
+								"message_type": "text"
+							}
+						}
+					}
+				}
+			},
+			"SendBatchMessage": {
+				"description": "ID dari device yang ingin ditambahkan.",
+				"required": true,
+				"content": {
+					"application/json": {
+						"schema": {
+							"type": "object",
+							"additionalProperties": false,
+							"properties": {
+								"messages": {
+									"description": "Array of message dari pesan yang akan dikirimkan. Nilai dari setiap tiap atribut message sama dengan parameter pada POST /messages minus atribut device_id",
+									"type": "array",
+									"maxItems": 50,
+									"items": {
+										"type": "object",
+										"additionalProperties": false,
+										"properties": {
+											"device_id": {
+												"type": "string",
+												"maxLength": 500,
+												"pattern": "[\\n\\s\\w\\W^$]"
+											},
+											"message": {
+												"type": "string",
+												"maxLength": 500,
+												"pattern": "[\\n\\s\\w\\W^$]"
+											},
+											"caption": {
+												"type": "string",
+												"maxLength": 500,
+												"pattern": "[\\n\\s\\w\\W^$]"
+											},
+											"phone_number": {
+												"type": "string",
+												"maxLength": 500,
+												"pattern": "[\\n\\s\\w\\W^$]"
+											},
+											"is_group_message": {
+												"type": "boolean",
+												"default": false
+											},
+											"message_type": {
+												"type": "string",
+												"maxLength": 500,
+												"pattern": "[\\n\\s\\w\\W^$]"
+											},
+											"send_at": {
+												"type": "string",
+												"maxLength": 500,
+												"pattern": "[\\n\\s\\w\\W^$]"
+											}
+										}
+									}
+								},
+								"device_id": {
+									"description": "Device yang akan digunakan untuk mengirim.",
+									"type": "string",
+									"maxLength": 500,
+									"pattern": "[\\n\\s\\w\\W^$]"
+								}
+							},
+							"example": {
+								"messages": [
+									{
+										"message": "Hello from api.kirimwa.id - #1",
+										"phone_number": "6281234567890",
+										"message_type": "text"
+									},
+									{
+										"message": "https://rioastamal.net/portfolio/img/rioastamal.jpg",
+										"caption": "Hello from api.kirimwa.id - #2",
+										"phone_number": "6281234567890-1628639662",
+										"is_group_message": true,
+										"message_type": "image",
+										"send_at": "2021-10-17T06:50:05+07:00"
+									}
+								],
+								"device_id": "iphone-x-pro"
+							}
+						}
+					}
+				}
+			}
+		},
+		"responses": {
+			"DefaultResponse": {
+				"description": "200 Success",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/2XX"
+						},
+						"examples": {
+							"BadRequest": {
+								"$ref": "#/components/examples/Success"
+							}
+						}
+					}
+				}
+			},
+			"202": {
+				"description": "202 Accepted",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/2XX"
+						},
+						"examples": {
+							"BadRequest": {
+								"$ref": "#/components/examples/Success"
+							}
+						}
+					}
+				}
+			},
+			"204": {
+				"description": "204 No Content"
+			},
+			"BadRequest": {
+				"description": "400 Bad Request",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/4XX"
+						},
+						"examples": {
+							"BadRequest": {
+								"$ref": "#/components/examples/BadRequest"
+							}
+						}
+					}
+				}
+			},
+			"Unauthorized": {
+				"description": "401 Missing API token.",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/4XX"
+						},
+						"examples": {
+							"Unauthorized": {
+								"$ref": "#/components/examples/Unauthorized"
+							}
+						}
+					}
+				}
+			},
+			"Forbidden": {
+				"description": "403 Invalid API token.",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/4XX"
+						},
+						"examples": {
+							"Forbidden": {
+								"$ref": "#/components/examples/Forbidden"
+							}
+						}
+					}
+				}
+			},
+			"NotFound": {
+				"description": "404 Not Found",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/4XX"
+						},
+						"examples": {
+							"NotFound": {
+								"$ref": "#/components/examples/NotFound"
+							}
+						}
+					}
+				}
+			},
+			"NotAcceptable": {
+				"description": "406 Not Acceptable",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/4XX"
+						},
+						"examples": {
+							"NotFound": {
+								"$ref": "#/components/examples/NotFound"
+							}
+						}
+					}
+				}
+			},
+			"UnsupportedMediaType": {
+				"description": "415 Unsupported Media Type",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/4XX"
+						},
+						"examples": {
+							"NotFound": {
+								"$ref": "#/components/examples/NotFound"
+							}
+						}
+					}
+				}
+			},
+			"TooManyRequests": {
+				"description": "429 Too Many Requests",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/4XX"
+						},
+						"examples": {
+							"NotFound": {
+								"$ref": "#/components/examples/NotFound"
+							}
+						}
+					}
+				}
+			}
+		},
+		"schemas": {
+			"2XX": {
+				"additionalProperties": false,
+				"required": ["message", "data"],
+				"type": "object",
+				"properties": {
+					"message": {
+						"type": "string",
+						"maxLength": 500,
+						"pattern": "[\\n\\s\\w\\W^$]"
+					},
+					"data": {
+						"type": "object",
+						"additionalProperties": false,
+						"properties": {
+							"id": {
+								"type": "string",
+								"maxLength": 500,
+								"pattern": "[\\n\\s\\w\\W^$]"
+							},
+							"status": {
+								"type": "string",
+								"maxLength": 500,
+								"pattern": "[\\n\\s\\w\\W^$]"
+							},
+							"message": {
+								"type": "string",
+								"maxLength": 500,
+								"pattern": "[\\n\\s\\w\\W^$]"
+							},
+							"created_at": {
+								"type": "string",
+								"maxLength": 500,
+								"pattern": "[\\n\\s\\w\\W^$]"
+							},
+							"connected_at": {
+								"type": "string",
+								"maxLength": 500,
+								"pattern": "[\\n\\s\\w\\W^$]"
+							},
+							"disconnected_at": {
+								"type": "string",
+								"maxLength": 500,
+								"pattern": "[\\n\\s\\w\\W^$]"
+							},
+							"disconnected_reason": {
+								"type": "string",
+								"maxLength": 500,
+								"pattern": "[\\n\\s\\w\\W^$]"
+							},
+							"qr_code": {
+								"type": "string",
+								"maxLength": 500,
+								"pattern": "[\\n\\s\\w\\W^$]"
+							},
+							"image_url": {
+								"type": "string",
+								"maxLength": 500,
+								"pattern": "[\\n\\s\\w\\W^$]"
+							},
+							"devices": {
+								"type": "array",
+								"minItems": 1,
+								"maxItems": 10,
+								"items": {
+									"type": "object",
+									"additionalProperties": false,
+									"properties": {
+										"id": {
+											"type": "string",
+											"maxLength": 500,
+											"pattern": "[\\n\\s\\w\\W^$]"
+										},
+										"status": {
+											"type": "string",
+											"maxLength": 500,
+											"pattern": "[\\n\\s\\w\\W^$]"
+										},
+										"created_at": {
+											"type": "string",
+											"maxLength": 500,
+											"pattern": "[\\n\\s\\w\\W^$]"
+										},
+										"connected_at": {
+											"type": "string",
+											"maxLength": 500,
+											"pattern": "[\\n\\s\\w\\W^$]"
+										},
+										"disconnected_at": {
+											"type": "string",
+											"maxLength": 500,
+											"pattern": "[\\n\\s\\w\\W^$]"
+										},
+										"disconnected_reason": {
+											"type": "string",
+											"maxLength": 500,
+											"pattern": "[\\n\\s\\w\\W^$]"
+										}
+									}
+								}
+							},
+							"group": {
+								"type": "array",
+								"minItems": 1,
+								"maxItems": 10,
+								"items": {
+									"type": "object",
+									"additionalProperties": false,
+									"properties": {
+										"id": {
+											"type": "string",
+											"maxLength": 500,
+											"pattern": "[\\n\\s\\w\\W^$]"
+										},
+										"name": {
+											"type": "string",
+											"maxLength": 500,
+											"pattern": "[\\n\\s\\w\\W^$]"
+										}
+									}
+								}
+							},
+							"members": {
+								"type": "array",
+								"minItems": 1,
+								"maxItems": 10,
+								"items": {
+									"type": "string",
+									"maxLength": 500,
+									"pattern": "[\\n\\s\\w\\W^$]"
+								}
+							},
+							"messages": {
+								"type": "array",
+								"minItems": 1,
+								"maxItems": 10,
+								"items": {
+									"type": "object",
+									"additionalProperties": false,
+									"properties": {
+										"id": {
+											"type": "string",
+											"maxLength": 500,
+											"pattern": "[\\n\\s\\w\\W^$]"
+										},
+										"message": {
+											"type": "string",
+											"maxLength": 500,
+											"pattern": "[\\n\\s\\w\\W^$]"
+										},
+										"status": {
+											"type": "string",
+											"maxLength": 500,
+											"pattern": "[\\n\\s\\w\\W^$]"
+										},
+										"created_at": {
+											"type": "string",
+											"maxLength": 500,
+											"pattern": "[\\n\\s\\w\\W^$]"
+										},
+										"device_id": {
+											"type": "string",
+											"maxLength": 500,
+											"pattern": "[\\n\\s\\w\\W^$]"
+										},
+										"message_type": {
+											"type": "string",
+											"maxLength": 500,
+											"pattern": "[\\n\\s\\w\\W^$]"
+										},
+										"timestamp": {
+											"type": "integer"
+										},
+										"text": {
+											"type": "string",
+											"maxLength": 500,
+											"pattern": "[\\n\\s\\w\\W^$]"
+										},
+										"group_id": {
+											"type": "string",
+											"maxLength": 500,
+											"pattern": "[\\n\\s\\w\\W^$]"
+										},
+										"is_group_message": {
+											"type": "boolean"
+										},
+										"sender": {
+											"type": "string",
+											"maxLength": 500,
+											"pattern": "[\\n\\s\\w\\W^$]"
+										},
+										"caption": {
+											"type": "string",
+											"maxLength": 500,
+											"pattern": "[\\n\\s\\w\\W^$]"
+										},
+										"from_me": {
+											"type": "boolean"
+										},
+										"payload": {
+											"type": "object",
+											"additionalProperties": false,
+											"properties": {
+												"message": {
+													"type": "string",
+													"maxLength": 500,
+													"pattern": "[\\n\\s\\w\\W^$]"
+												},
+												"phone_number": {
+													"type": "string",
+													"maxLength": 500,
+													"pattern": "[\\n\\s\\w\\W^$]"
+												},
+												"device_id": {
+													"type": "string",
+													"maxLength": 500,
+													"pattern": "[\\n\\s\\w\\W^$]"
+												},
+												"message_type": {
+													"type": "string",
+													"maxLength": 500,
+													"pattern": "[\\n\\s\\w\\W^$]"
+												},
+												"caption": {
+													"type": "string",
+													"maxLength": 500,
+													"pattern": "[\\n\\s\\w\\W^$]",
+													"nullable": true,
+													"default": null
+												},
+												"is_group_message": {
+													"type": "boolean",
+													"default": false
+												}
+											}
+										},
+										"location": {
+											"type": "object",
+											"additionalProperties": false,
+											"properties": {
+												"name": {
+													"type": "string",
+													"maxLength": 500,
+													"nullable": true,
+													"pattern": "[\\n\\s\\w\\W^$]"
+												},
+												"address": {
+													"type": "string",
+													"maxLength": 500,
+													"nullable": true,
+													"pattern": "[\\n\\s\\w\\W^$]"
+												},
+												"longitude": {
+													"type": "integer",
+													"default": 0
+												},
+												"latitude": {
+													"type": "integer",
+													"default": 0
+												}
+											}
+										},
+										"contact": {
+											"type": "object",
+											"additionalProperties": false,
+											"properties": {
+												"name": {
+													"type": "string",
+													"maxLength": 500,
+													"nullable": true,
+													"pattern": "[\\n\\s\\w\\W^$]"
+												},
+												"vcard": {
+													"type": "string",
+													"maxLength": 500,
+													"nullable": true,
+													"pattern": "[\\n\\s\\w\\W^$]"
+												}
+											}
+										},
+										"interactive_response": {
+											"type": "object",
+											"additionalProperties": false,
+											"properties": {
+												"id": {
+													"type": "string",
+													"maxLength": 500,
+													"nullable": true,
+													"pattern": "[\\n\\s\\w\\W^$]"
+												},
+												"label": {
+													"type": "string",
+													"maxLength": 500,
+													"nullable": true,
+													"pattern": "[\\n\\s\\w\\W^$]"
+												}
+											}
+										},
+										"meta": {
+											"type": "object",
+											"additionalProperties": false,
+											"properties": {
+												"seconds": {
+													"type": "integer",
+													"minimum": 0,
+													"default": 0
+												},
+												"size": {
+													"type": "integer",
+													"minimum": 0,
+													"default": 0
+												},
+												"mime_type": {
+													"type": "string",
+													"maxLength": 500,
+													"nullable": true,
+													"pattern": "[\\n\\s\\w\\W^$]"
+												},
+												"file_name": {
+													"type": "string",
+													"maxLength": 500,
+													"nullable": true,
+													"pattern": "[\\n\\s\\w\\W^$]"
+												},
+												"dimension": {
+													"type": "object",
+													"additionalProperties": false,
+													"properties": {
+														"width": {
+															"type": "integer",
+															"minimum": 0,
+															"default": 0
+														},
+														"height": {
+															"type": "integer",
+															"minimum": 0,
+															"default": 0
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							},
+							"payload": {
+								"type": "object",
+								"additionalProperties": false,
+								"properties": {
+									"message": {
+										"type": "string",
+										"maxLength": 500,
+										"pattern": "[\\n\\s\\w\\W^$]"
+									},
+									"phone_number": {
+										"type": "string",
+										"maxLength": 500,
+										"pattern": "[\\n\\s\\w\\W^$]"
+									},
+									"device_id": {
+										"type": "string",
+										"maxLength": 500,
+										"pattern": "[\\n\\s\\w\\W^$]"
+									},
+									"message_type": {
+										"type": "string",
+										"maxLength": 500,
+										"pattern": "[\\n\\s\\w\\W^$]"
+									},
+									"caption": {
+										"type": "string",
+										"maxLength": 500,
+										"pattern": "[\\n\\s\\w\\W^$]",
+										"nullable": true,
+										"default": null
+									},
+									"is_group_message": {
+										"type": "boolean",
+										"default": false
+									}
+								}
+							},
+							"meta": {
+								"type": "object",
+								"additionalProperties": false,
+								"properties": {
+									"location": {
+										"type": "string",
+										"maxLength": 500,
+										"pattern": "[\\n\\s\\w\\W^$]"
+									},
+									"number_of_messages": {
+										"type": "integer",
+										"minimum": 1
+									},
+									"number_of_participants": {
+										"type": "integer",
+										"minimum": 1
+									},
+									"name": {
+										"type": "string",
+										"maxLength": 500,
+										"nullable": true,
+										"pattern": "[\\n\\s\\w\\W^$]"
+									},
+									"admins": {
+										"type": "array",
+										"minItems": 1,
+										"maxItems": 1024,
+										"items": {
+											"type": "string",
+											"maxLength": 500,
+											"pattern": "[\\n\\s\\w\\W^$]"
+										}
+									},
+									"created_at": {
+										"type": "string",
+										"maxLength": 500,
+										"nullable": true,
+										"pattern": "[\\n\\s\\w\\W^$]"
+									},
+									"last_key": {
+										"type": "string",
+										"maxLength": 500,
+										"nullable": true,
+										"pattern": "[\\n\\s\\w\\W^$]"
+									}
+								}
+							}
+						}
+					},
+					"page": {
+						"type": "object",
+						"additionalProperties": false,
+						"properties": {
+							"current": {
+								"type": "integer",
+								"minimum": 1
+							},
+							"total": {
+								"type": "integer",
+								"minimum": 0
+							},
+							"limit": {
+								"type": "integer",
+								"minimum": 1
+							},
+							"total_data": {
+								"type": "integer",
+								"minimum": 0
+							}
+						}
+					}
+				}
+			},
+			"4XX": {
+				"additionalProperties": false,
+				"required": ["message", "errors"],
+				"type": "object",
+				"properties": {
+					"message": {
+						"type": "string",
+						"maxLength": 500,
+						"pattern": "[\\n\\s\\w\\W^$]"
+					},
+					"errors": {
+						"type": "object",
+						"additionalProperties": false,
+						"properties": {
+							"token": {
+								"type": "string",
+								"maxLength": 500,
+								"pattern": "[\\n\\s\\w\\W^$]"
+							},
+							"device_id": {
+								"type": "string",
+								"maxLength": 500,
+								"pattern": "[\\n\\s\\w\\W^$]"
+							}
+						}
+					}
+				}
+			},
+			"String": {
+				"type": "string",
+				"maxLength": 500,
+				"pattern": "[\\n\\s\\w\\W^$]",
+				"x-42c-sample": "iphone-x"
+			}
+		},
+		"examples": {
+			"DeviceList": {
+				"description": "Show All Devices list",
+				"summary": "OK",
+				"value": {
+					"message": "Success.",
+					"data": {
+						"devices": [
+							{
+								"id": "iphone-x-pro",
+								"status": "disconnected",
+								"created_at": "2021-07-09T15:11:53.657Z",
+								"connected_at": "2021-07-18T13:26:57.698Z",
+								"disconnected_at": "2021-07-18T13:27:33.089Z",
+								"disconnected_reason": "Send message timeout."
+							},
+							{
+								"id": "zenfone-red-1",
+								"status": "disconnected",
+								"created_at": "2021-07-09T08:40:58.070Z",
+								"connected_at": "2021-07-19T13:26:57.698Z",
+								"disconnected_at": "2021-07-19T13:27:33.089Z",
+								"disconnected_reason": "Send message timeout."
+							}
+						]
+					},
+					"page": {
+						"current": 1,
+						"total": 10,
+						"limit": 10,
+						"total_data": 100
+					}
+				}
+			},
+			"DeviceStatus": {
+				"description": "Get Devices Status",
+				"summary": "disconnected",
+				"value": {
+					"message": "Success.",
+					"data": {
+						"id": "iphone-x-pro",
+						"status": "disconnected",
+						"created_at": "2021-07-09T15:11:53.657Z",
+						"connected_at": "2021-07-18T13:26:57.698Z",
+						"disconnected_at": "2021-07-18T13:27:33.089Z",
+						"disconnected_reason": "Send message timeout."
+					}
+				}
+			},
+			"QRCode": {
+				"description": "Get QR Code",
+				"summary": "Get QR Code",
+				"value": {
+					"message": "Success.",
+					"data": {
+						"qr_code": "1@U2tS5Q1elzj6Y7IAKDurwvja47SQz8bvW24fb43r3n+gPC4PN1iSNlGLizlfGsrHSD/M6ym6/aYiYw==,xXlcsqVquva7/1c2g8wAZkWdnk2el5tHWh7MWUW2UTc=,v+P3exsbB1W62wX3Vn4dcC==",
+						"image_url": "https://api.kirimwa.id/v1/qr/show?qrcode=1%40U2tS5Q1elzj6Y7IAKDurwvja47SQz8bvW24fb43r3n%2BgPC4PN1iSNlGLizlfGsrHSD%2FM6ym6%2FaYiYw%3D%3D%2CxXlcsqVquva7%2F1c2g8wAZkWdnk2el5tHWh7MWUW2UTc%3D%2Cv%2BP3exsbB1W62wX3Vn4dcC%3D%3D&device_id=YOUR_DEVICE_ID"
+					}
+				}
+			},
+			"GroupList": {
+				"description": "Get Group List",
+				"summary": "Get Group List",
+				"value": {
+					"message": "Contacts has been synced.",
+					"data": {
+						"group": [
+							{
+								"id": "6281234567890-1628639680",
+								"name": "Grup Keluarga Besar"
+							},
+							{
+								"id": "6281234567890-1628639662",
+								"name": "Developer Tim"
+							}
+						]
+					}
+				}
+			},
+			"GroupDetail": {
+				"description": "Get Group Detail",
+				"summary": "Get Group Detail",
+				"value": {
+					"message": "Get Group Detail",
+					"data": {
+						"members": [
+							"6281234567890",
+							"6281234567891",
+							"6281234567892",
+							"6281234567893",
+							"6281234567894",
+							"6281234567895"
+						],
+						"meta": {
+							"name": "Grup Keluarga Besar",
+							"admins": [
+								"6281234567890",
+								"6281234567891",
+								"6281234567892",
+								"6281234567893",
+								"6281234567894",
+								"6281234567895"
+							],
+							"created_at": "2019-09-22T12:31:30.000Z",
+							"number_of_participants": 6
+						}
+					}
+				}
+			},
+			"SendMessage": {
+				"description": "Send Message",
+				"summary": "Send Message",
+				"value": {
+					"message": "Send Message",
+					"data": {
+						"id": "kwid-426564a5db7940288dc9fddb845",
+						"status": "pending",
+						"message": "Message is pending and waiting to be processed.",
+						"meta": {
+							"location": "https://api.kirimwa.id/v1/messages/kwid-426564a5db7940288dc9fddb845"
+						}
+					}
+				}
+			},
+			"GetBatchMessages": {
+				"description": "Send Message",
+				"summary": "Send Message",
+				"value": {
+					"message": "Send Message",
+					"data": {
+						"meta": {
+							"last_key": "null"
+						}
+					}
+				}
+			},
+			"GetBatchMessagesStatus": {
+				"description": "Get Batch Messages Status",
+				"summary": "Get Batch Messages Status",
+				"value": {
+					"message": "Get Batch Messages Status",
+					"data": {
+						"meta": {
+							"last_key": "null"
+						}
+					}
+				}
+			},
+			"SendBatchMessage": {
+				"description": "Send Message",
+				"summary": "Send Message",
+				"value": {
+					"message": "Send Message",
+					"data": {
+						"id": "720ef393-0ba1-4dd1-9543-b9b03c35c247",
+						"message": "Messages are being processed.",
+						"meta": {
+							"number_of_messages": 2,
+							"location": "https://api.kirimwa.id/v1/batch-messages/720ef393-0ba1-4dd1-9543-b9b03c35c247"
+						}
+					}
+				}
+			},
+			"MessageList": {
+				"description": "Get All Message Detail",
+				"summary": "Get All Message Detail",
+				"value": {
+					"message": "Get All Message Detail",
+					"data": {
+						"messages": [
+							{
+								"id": "kwid-426564a5db7940288dc9fddb845",
+								"message": "Message has been sent.",
+								"status": "success",
+								"created_at": "2021-07-10T00:18:30.614Z",
+								"payload": {
+									"message": "Halo ini adalah pesan dari api.kirimwa.id",
+									"phone_number": "6281234567890",
+									"device_id": "iphone-x-pro",
+									"message_type": "text",
+									"caption": "null",
+									"is_group_message": false
+								}
+							}
+						],
+						"meta": {
+							"last_key": "kwid-426564a5db7940288dc9fddb812"
+						}
+					}
+				}
+			},
+			"MessageInfo": {
+				"description": "Get All Message Detail",
+				"summary": "Get All Message Detail",
+				"value": {
+					"message": "Get All Message Detail",
+					"data": {
+						"id": "kwid-426564a5db7940288dc9fddb812",
+						"message": "Message has been sent.",
+						"status": "success",
+						"created_at": "2021-07-10T00:16:10.373Z",
+						"payload": {
+							"message": "Halo ini adalah pesan dari api.kirimwa.id",
+							"phone_number": "6281234567890",
+							"device_id": "asus-zenfone-1",
+							"message_type": "text",
+							"caption": "null",
+							"is_group_message": false
+						}
+					}
+				}
+			},
+			"IncomingMessage": {
+				"description": "Get All Message Detail",
+				"summary": "Get All Message Detail",
+				"value": {
+					"message": "Get All Message Detail",
+					"data": {
+						"messages": [
+							{
+								"id": "3EB07079D3331BA4746C",
+								"device_id": "iphone-x-pro",
+								"message_type": "text",
+								"timestamp": 1631369848,
+								"text": "Hello incoming message from api.kirimwa.id",
+								"group_id": "6281234567890-1628639662",
+								"is_group_message": true,
+								"sender": "6281234567891",
+								"caption": "null",
+								"from_me": false,
+								"created_at": "2021-09-11T14:17:29.291Z",
+								"location": {
+									"name": "null",
+									"address": "null",
+									"latitude": 0,
+									"longitude": 0
+								},
+								"contact": {
+									"name": "null",
+									"vcard": "null"
+								},
+								"meta": {
+									"seconds": 0,
+									"size": 42,
+									"mime_type": "plain/text",
+									"dimension": {
+										"width": 0,
+										"height": 0
+									},
+									"file_name": "null"
+								},
+								"interactive_response": {
+									"id": "null",
+									"label": "null"
+								}
+							},
+							{
+								"id": "3EB07079D3331BA471ER",
+								"device_id": "iphone-x-pro",
+								"message_type": "text",
+								"timestamp": 1631369848,
+								"text": "Hello from api.kirimwa.id",
+								"group_id": "null",
+								"is_group_message": false,
+								"sender": "6281234567890",
+								"caption": "null",
+								"from_me": false,
+								"created_at": "2021-09-11T14:17:29.291Z",
+								"location": {
+									"name": "null",
+									"address": "null",
+									"latitude": 0,
+									"longitude": 0
+								},
+								"contact": {
+									"name": "null",
+									"vcard": "null"
+								},
+								"meta": {
+									"seconds": 0,
+									"size": 25,
+									"mime_type": "plain/text",
+									"dimension": {
+										"width": 0,
+										"height": 0
+									},
+									"file_name": "null"
+								},
+								"interactive_response": {
+									"id": "null",
+									"label": "null"
+								}
+							}
+						],
+						"meta": {
+							"last_key": "null"
+						}
+					}
+				}
+			},
+			"Success": {
+				"description": "OK",
+				"summary": "OK",
+				"value": {
+					"message": "Success.",
+					"data": {}
+				}
+			},
+			"Created": {
+				"description": "Created",
+				"summary": "Created",
+				"value": {
+					"message": "Success.",
+					"data": {
+						"id": "iphone-x-pro",
+						"status": "disconnected",
+						"created_at": "2021-07-09T15:11:53.657Z",
+						"meta": {
+							"location": "https://api.kirimwa.id/v1/devices/iphone-x-pro"
+						}
+					},
+					"page": {
+						"current": 1,
+						"total": 10,
+						"limit": 10,
+						"total_data": 100
+					}
+				}
+			},
+			"BadRequest": {
+				"description": "400 Bad Request",
+				"summary": "Bad Request",
+				"value": {
+					"message": "Bad Request",
+					"errors": {}
+				}
+			},
+			"Unauthorized": {
+				"description": "401 Missing API token.",
+				"summary": "API Token is missing/not provided",
+				"value": {
+					"message": "Missing API token.",
+					"errors": {
+						"token": "Missing API token."
+					}
+				}
+			},
+			"Forbidden": {
+				"description": "403 Invalid API token.",
+				"summary": "API Token is invalid",
+				"value": {
+					"message": "Invalid API token.",
+					"errors": {
+						"token": "Invalid API token."
+					}
+				}
+			},
+			"NotFound": {
+				"description": "404 Not Found",
+				"summary": "Not Found.",
+				"value": {
+					"message": "Device not found.",
+					"errors": {
+						"device_id": "Device not found."
+					}
+				}
+			}
+		},
+		"securitySchemes": {
+			"bearerAuth": {
+				"type": "http",
+				"scheme": "bearer",
+				"bearerFormat": "JWT",
+				"description": "Authentication with device id"
+			}
+		}
+	}
+}
